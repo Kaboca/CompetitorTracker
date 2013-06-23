@@ -3,9 +3,12 @@
 ## Notes: TradeSkillMaster module for Competitor`s online / offline status tracking
 ## Author: Kaboca/HU
 ## SavedVariables: TradeSkillMaster_CompetitorTrackerDB
+## DefaultState: Disabled
 ## Dependency: TradeSkillMaster
 ## OptionalDeps: AceBucket-3.0
-## Version: V5.3.0.2-Alpha
+## Version: @project-version@
+## X-Credits: sapu94 (TradeSkillMaster); Verna (FriendTracker); j311yf1sh (TradeSkillMaster_CraftingSniper): Kring (FriendsShare Resurrection)
+## X-Category: auction-economy
 
 #@no-lib-strip@
 Libs\AceBucket-3.0\AceBucket-3.0.xml

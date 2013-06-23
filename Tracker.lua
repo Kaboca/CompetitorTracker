@@ -34,12 +34,12 @@ local savedDBDefaults = {
 	profile = {
 		treeGroupStatus = {treewidth = 200, groups={[2]=true}},
 		
-		DataModuleEnabled = true,
-		MonitorModuleEnabled = true,
+		DataModuleEnabled = false,
+		MonitorModuleEnabled = false,
 		
 		TrackMarked = false,
-		TrackMark = "",
-		TrackMaxRecord = 10,
+		TrackMark = "[auc]",
+		TrackMaxRecord = 20,
 		SyncCompetitors = false,
 	},
 }
@@ -53,12 +53,12 @@ function TSMCT:OnInitialize()
 	
 	TSMAPI:RegisterReleasedModule(addonName, TSMCT.Version, GetAddOnMetadata(addonName, "Author"), GetAddOnMetadata(addonName, "Notes"))
 	TSMAPI:RegisterSlashCommand('ctrack', function(...) TSMCT.TrackingEnable(not TSMCT.db.profile.DataModuleEnabled); end, L["SlashCommandHelp"])
-	TSMAPI:RegisterIcon("Competitor Tracker","Interface\\Icons\\Ability_Priest_Silence",function(...) TSMCT.Config:Load(...) end, addonName,"module")
+	TSMAPI:RegisterIcon(L["TSMModuleIconText"],"Interface\\Icons\\Ability_Priest_Silence",function(...) TSMCT.Config:Load(...) end, addonName,"module")
 end
 
 function TSMCT:OnEnable()
 	TSMCT.db.factionrealm.loginTime = time()
-	TSMCT:Printf("Version:%s",TSMCT.Version)
+	TSMCT:Printf(L["VersionText"],TSMCT.Version)
 	
 	if TSMCT.db.profile.DataModuleEnabled then 
 		TSMCT:EnableModule("Data")

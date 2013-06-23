@@ -7,7 +7,7 @@ TradeSkillMaster_CompetitorTracker
 This is a module for [[http://www.curse.com/addons/wow/tradeskill-master|TradeSkillMaster]] that reports when WoW Auction House Competitors are online/offline and also saves this data for all characters on the same realm and faction.
 
 If enabled the sync feature and then you add or remove someone from your friends list and relog to an alt, 
-that person will be added/removed from the alts friends list as well. Also, any entries on that alts
+that person will be added/removed from the alt's friends list as well. Also, any entries on that alt's
 list which isn't in the global list, will be added to the other characters whenever you log them in.
 
 I use it to track my auction house competition, while playing on alts.
