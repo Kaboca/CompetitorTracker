@@ -1,18 +1,63 @@
-local debug = false
---[===[@debug@
-debug = true
---@end-debug@]===]
+-- TradeSkillMaster_CompetitorTracker Locale - enUS
+-- Please use the localization app on CurseForge to update this
+-- http://wow.curseforge.com/addons/competitortracker/localization/
 
-local L = LibStub("AceLocale-3.0"):NewLocale("TradeSkillMaster_CompetitorTracker", "enUS", true)
+local debug = false
+--@debug@
+debug = true
+--@end-debug@
+
+local L = LibStub("AceLocale-3.0"):NewLocale("TradeSkillMaster_CompetitorTracker", "enUS", true, debug)
 if not L then return end
---@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, handle-subnamespaces="concat")@
 
 -- <<Tracker.lua>> --
-L["ResetDB"]="Configuration files incompatable, resetting"
-L["DBInit"]="Initial Database created"
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="tracker")@
+--@do-not-package@
+L["TSMModuleIconText"] = "Competitor Tracker"
 L["SlashCommandHelp"] = "Enables/Disables the Competitor Tracker module"
+L["VersionText"] = "Version:%s"
+--@end-do-not-package@
 
--- << Config.lua >> --
+
+
+-- <<Monitor.lua>> ---------------------------------------------------------------------------------
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="monitor")@
+--@do-not-package@
+L["MonitorTitle"]="Competitor Monitor"
+L["MonitorEnabled"] = "Monitor module enabled."
+L["MonitorDisabled"] = "Monitor module disabled."
+
+L["MHeadName"] = "Name"
+L["MHeadLocation"] = "Location"
+L["MHeadBefore"] = "Before"
+L["MHeadNow"] = "Now"
+--@end-do-not-package@
+
+
+
+-- <<Data.lua>> ------------------------------------------------------------------------------------
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="data")@
+--@do-not-package@
+L["DataEnabled"] = "Data module enabled."
+L["DataDisabled"] = "Data module disabled."
+L["DataFriendListWait"] = "Friend list not ready, will try again in 15 seconds."
+L["DataFriendCount"] = "Local friend count:%d"
+L["DataRegister"] = "[%s] competitor registered"
+L["DataRemove"] = "Removing %s from friends list."
+L["DataSetNote"] = "Setting note \"%s\" for %s."
+L["DataAddFriend"] = "Adding %s to friends list."
+L["DataChecking"] = "Checking friendlist..."
+L["DataWillBeDeleted"] = "[%s] competitor data will be deleted after [%s] when the next friend list change event happens."
+L["DataDelete"] = "[%s] competitor data deleted and added to the deleted competitors list."
+L["DataRemoveFromDeleted"] = "[%s] competitor removed from the deleted competitors list, because manually added to the friends list."
+L["DataRemovedRecord"] = "Removed record:%s, %s"
+--@end-do-not-package@
+
+
+
+-- << Config.lua >> --------------------------------------------------------------------------------
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="config")@
+--@do-not-package@
 L["TreeOptions"] = "Options"
 L["TreeCompetitors"] = "Competitors"
 
@@ -20,7 +65,7 @@ L["OptTabOptions"] = "Options"
 L["OptTabProfiles"] = "Profiles"
 
 L["OptDataModuleEnabledLabel"] = "Track Competitors"
-L["OptDataModuleEnabledInfo"] = "If you enable this option, the data module record all login/logout activity in the background."
+L["OptDataModuleEnabledInfo"] = "If you enable this option, the data module will record all login/logout activity in the background."
 
 L["OptMonitorModuleEnabledLabel"] = "Competitor Monitor Enabled"
 L["OptMonitorModuleEnabledInfo"] = "If you enable this option, you can monitor the activity of competitors in a window."
@@ -33,12 +78,16 @@ L["OptTrackMakInfo"] = "Track competitor only if marked with this in the friend 
 L["OptTrackMakDisabledInfo"] = "First, enable the track only with mark checkbox!"
 
 L["OptSyncLabel"] ="Syncronize Competitors"
-L["OptSyncInfo"] = "If you add or remove someone from your friends list and relog to an alt, that person will be added/removed from the alts friends list as well. Also, any entries on that alts list which isn't in the global list, will be added to the other characters whenever you log them in."
+L["OptSyncInfo"] = "If you add or remove someone from your friends list and relog to an alt, that person will be added/removed from the alt's friends list as well. Also, any entries on that alt's list which isn't in the global list, will be added to the other characters whenever you log them in."
 
 L["OptTrackMaxRecordLabel"] = "Max saved record"
 L["OptTrackMaxRecordInfo"] = "Max record saved for each comptetitor."
+--@end-do-not-package@
+
 
 -- Profile Section -- 
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="config.profile")@
+--@do-not-package@
 L["ProfileDefault"] = "Default"
 L["ProfileIntro"] = "You can change the active database profile, so you can have different settings for every character."
 L["ProfileResetDesc"] = "Reset the current profile back to its default values, in case your configuration is broken, or you simply want to start over."
@@ -56,13 +105,21 @@ L["ProfileCurrent"] = "Current Profile:"
 L["ProfileAccept"] = "Accept"
 L["ProfileCancel"] = "Cancel"
 L["ProfileDeleteSure"] = "Are you sure you want to delete the selected profile?"
+--@end-do-not-package@
 
--- Deleted Competitor List
+
+-- Deleted Competitor List Section --
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="config.deleted")@
+--@do-not-package@
 L["DeletedTab"] = "Deleted"
 L["DeletedTitle"] = "Deleted Competitor List Options"
 L["DeletedInfo"] = "Here you can remove competitor from the deleted list. Therefore, the competitor will not be deleted -removed from your friend list - when you relog on an ALT and also Syncronize Competitors option  is enabled."
+--@end-do-not-package@
+
 
 -- Viwer Section --
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="viwer")@
+--@do-not-package@
 L["VHeadTime"] = "Time"
 L["VHeadPeriode"] = "Periode" 
 L["VHeadLocation"] = "Location"
@@ -73,28 +130,5 @@ L["CLevel"] = "Level"
 L["CLocation"] = "Last location"
 L["CStatus"] = "Last status"
 L["CNote"] = "Note"
+--@end-do-not-package@
 
--- <<Monitor.lua>> --
-L["MonitorTitle"]="Competitor Monitor"
-L["MonitorEnabled"] = "Monitor module enabled."
-L["MonitorDisabled"] = "Monitor module disabled."
-
-L["MHeadName"] = "Name"
-L["MHeadLocation"] = "Location"
-L["MHeadBefore"] = "Before"
-L["MHeadNow"] = "Now"
-
--- <<Data.lua>> --
-L["DataEnabled"] = "Data module enabled."
-L["DataDisabled"] = "Data module disabled."
-L["DataFriendListWait"] = "Friend list not ready, will try again in 15 seconds."
-L["DataFriendCount"] = "Local friend count:%d"
-L["DataRegister"] = "[%s] competitor registered"
-L["DataRemove"] = "Removing %s from friends list."
-L["DataSetNote"] = "Setting note \"%s\" for %s."
-L["DataAddFriend"] = "Adding %s to friends list."
-L["DataChecking"] = "Checking friendlist..."
-L["DataWillBeDeleted"] = "[%s] competitor data will be deleted after [%s] when the next friend list change event happens."
-L["DataDelete"] = "[%s] competitor data deleted and added to the deleted competitors list."
-L["DataRemoveFromDeleted"] = "[%s] competitor removed from the deleted competitors list, because manually added to the friends list."
-L["DataRemovedRecord"] = "Removed record:%s, %s"
