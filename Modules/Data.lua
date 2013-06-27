@@ -13,11 +13,13 @@ function Data:OnEnable()
 	configDB  = TSMCT.db.profile
 	removedInThisSession = {}
 	
-	TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)	
+	TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)
 end
 
 function Data:OnDisable()
 	TSMAPI:CancelFrame("CompTrackerDataUpdate")
+	TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
+	
 	if Data.UpdateHandle then
 		Data:UnregisterBucket(Data.UpdateHandle)
 	end
@@ -154,7 +156,9 @@ function Data:BucketEventHandler()
 			if not v.RemoveTime then
 				v.RemoveTime = time() + 120 
 				TSMCT:Printf(L["DataWillBeDeleted"],k, TSMCT.GetFormattedTime(v.RemoveTime, "fromnow"))
+				TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", 130, Data.RefreshFriendlist,15)	
 			elseif v.RemoveTime < time() then
+				TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
 				Data.DeleteCompetitorData(k)
 				deletedCompetitors[k] = true
 			end
@@ -166,4 +170,9 @@ function Data.DeleteCompetitorData(name)
 	wipe(competitors[name])
 	competitors[name] = nil
 	TSMCT:Printf(L["DataDelete"],name)
+end
+
+function Data.RefreshFriendlist()
+	ShowFriends()
+	--TSMCT:Printf(">")
 end
