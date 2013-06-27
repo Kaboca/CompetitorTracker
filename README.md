@@ -1,6 +1,3 @@
-TradeSkillMaster_CompetitorTracker
-==================================
-
 == WARNING: This is not an official TradeSkillMaster module==
 
 == TradeSkillMaster_CompetitorTracker ==
@@ -10,18 +7,24 @@ If enabled the sync feature and then you add or remove someone from your friends
 that person will be added/removed from the alt's friends list as well. Also, any entries on that alt's
 list which isn't in the global list, will be added to the other characters whenever you log them in.
 
-I use it to track my auction house competition, while playing on alts.
+If you do not want to synchronize/track everyone on your friendlist:
+* enable the **Track only with mark** option, 
+* and set  a desirable text - something like: auctioneer - to the **Track Mark** field, 
+* then you can tag (mark)  every competitor in your friend list friend note with the text in the **Track Mark** field,
+ so the addon will only track the tagged/marked persons. I use it to track my auction house competition, while playing on alts.
 
 
 ==== How to get it to work ====
-First, because this is a TradeSkillMaster module, you need to install TradeSkillMaster main module from here 
+* Because this is a TradeSkillMaster module, you need to install TradeSkillMaster main module from here 
 (http://www.curse.com/addons/wow/tradeskill-master). 
+* Enable the competitor tracker module in the options.
+* To access the options simply type "/tsm" and then click on the Competitor Tracker icon in the top right.
 
 ===== Command Line =====
 * /TSM help
 * /TSM ctrack - Enables/ Disables the competitor tracker module.
 
-To access the options simply type "/tsm" and click on Competitor Tracker icon in the top right.
+
 
 ==== Where to get it ====
 *[[https://github.com/Kaboca/CompetitorTracker| GITHUB]] - Alpha Quality
@@ -31,19 +34,19 @@ To access the options simply type "/tsm" and click on Competitor Tracker icon in
 ==== Contacting the Authors ====
 *  Please use the bug reporting feature to submit bug reports. 
 *  Please do not submit bug reports in comments.
-*  Please note that this is my first addon, and that English is not my native language.
-*  It is heavily inspired by [[http://www.curse.com/users/Verna|Verna’s]] FriendTracker. 
+*  Please note that this is my first addon, and that English is not my native language. Please help me to correct the spelling errors in this text and also in the addon!
 
 ==== Feature Requests/Bug Reporting ====
 Read the [[http://www.wowace.com/addons/arl/pages/feedback-and-bug-reporting/| Bug Reporting and Feature Requesting]] information before submitted a bug report or feature request. 
 Posting reports in the comments is not the place to do so.
 
 === Acknowledgments ===
-Ideas for the mod came from 
-*  [[http://www.curse.com/addons/wow/friendtracker|FriendTracker]] (original mod no longer updated), 
+*  It is heavily inspired by [[http://www.curse.com/users/Verna|Verna’s]]  [[http://www.curse.com/addons/wow/friendtracker|FriendTracker]]  (the addon no longer updated). 
+
+Ideas for the mod came from  
 *  [[http://wow.curseforge.com/addons/tradeskillmaster_craftingsniper/|TradeSkillMaster_CraftingSniper.]] 
 *  [[http://wow.curseforge.com/addons/friends-share-resurrection/|FriendsShare]] 
 *  and of course [[http://wow.curseforge.com/addons/tradeskill-master/|TradeSkillMaster]]
-*  Everyone who has helped me with localizations - when I created one :-). 
+*  Everyone who has help me with localizations 
 
 Please see the X-Credits field for more Acknowledgments.  Any code snippets borrowed or inspired from are credited in the code files. 

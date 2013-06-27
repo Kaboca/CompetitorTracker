@@ -3,7 +3,7 @@ local addonName, TSMCT = ...
 local Private = {}
 local Data = TSMCT:NewModule("Data", "AceBucket-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
-local competitors, deletedCompetitors, configDB
+local competitors, deletedCompetitors, configDB, removedInThisSession
 
 function Data:OnEnable()
 	TSMCT:Print(L["DataEnabled"])
@@ -11,6 +11,7 @@ function Data:OnEnable()
 	competitors=TSMCT.db.factionrealm.competitors
 	deletedCompetitors = TSMCT.db.factionrealm.deleted
 	configDB  = TSMCT.db.profile
+	removedInThisSession = {}
 	
 	TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)	
 end
@@ -49,6 +50,7 @@ function Data.Update()
 			if deletedCompetitors[name] then
 				TSMCT:Printf(L["DataRemove"], name)
 				RemoveFriend(name)
+				removedInThisSession[name] = true
 			else
 				if competitors[name] and competitors[name].friendNote then
 					if not noteList[name] or noteList[name] ~= competitors[name].friendNote then
@@ -63,6 +65,7 @@ function Data.Update()
 			if not friendList[name] and not v.RemoveTime then
 				TSMCT:Printf(L["DataAddFriend"], name)
 				AddFriend(name)
+				v.RecentlyAddedByTheTracker = time()
 			end
 		end
 	end
@@ -83,7 +86,7 @@ function Data:BucketEventHandler()
     for i=1,GetNumFriends() do
 	    local name, level, class, location, connected, status, friendNote = GetFriendInfo(i)
 		
-		if name then
+		if name and not removedInThisSession[name] then
 			if connected then connected=true else connected=false end
 
 			--TSMCT:Print(name)
@@ -92,6 +95,7 @@ function Data:BucketEventHandler()
 			if competitor then
 				competitor.inFriendList = true
 				competitor.RemoveTime = nil
+				competitor.RecentlyAddedByTheTracker = nil
 				
 				if competitor.connected ~= connected then
 					competitor.previous=time()-competitor.modified
@@ -146,7 +150,7 @@ function Data:BucketEventHandler()
 	end
 	
 	for k, v in pairs(competitors) do
-		if not v.inFriendList then
+		if not v.inFriendList and not v.RecentlyAddedByTheTracker then
 			if not v.RemoveTime then
 				v.RemoveTime = time() + 120 
 				TSMCT:Printf(L["DataWillBeDeleted"],k, TSMCT.GetFormattedTime(v.RemoveTime, "fromnow"))
