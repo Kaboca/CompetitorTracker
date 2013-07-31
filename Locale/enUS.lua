@@ -82,6 +82,13 @@ L["OptSyncInfo"] = "If you add or remove someone from your friends list and relo
 
 L["OptTrackMaxRecordLabel"] = "Max saved record"
 L["OptTrackMaxRecordInfo"] = "Max record saved for each comptetitor."
+
+L["OptMonitorMaxRowsLabel"] = "Monitor Window Rows"
+L["OptMonitorMaxRowsInfo"] = "Number of Monitor Window Rows (Requires Reload)."
+
+L["OptTrackMaxRowsLabel"] = "History List Rows"
+L["OptTrackMaxRowsInfo"] = "Number of rows displayed (Requires Reload)."
+
 --@end-do-not-package@
 
 

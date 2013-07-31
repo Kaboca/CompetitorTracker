@@ -28,6 +28,7 @@ local savedDBDefaults = {
 			offsetY = 0,
 			width=300,
 			height=100,
+			numRows=10,
 		},
 	},
 	
@@ -40,6 +41,7 @@ local savedDBDefaults = {
 		TrackMarked = false,
 		TrackMark = "[auc]",
 		TrackMaxRecord = 20,
+		TrackNumRows = 26,
 		SyncCompetitors = false,
 	},
 }
@@ -51,10 +53,35 @@ function TSMCT:OnInitialize()
 
 	TSMCT.db = LibStub:GetLibrary("AceDB-3.0"):New(addonName.."DB", savedDBDefaults, true)
 	
-	TSMAPI:RegisterReleasedModule(addonName, TSMCT.Version, GetAddOnMetadata(addonName, "Author"), GetAddOnMetadata(addonName, "Notes"))
-	TSMAPI:RegisterSlashCommand('ctrack', function(...) TSMCT.TrackingEnable(not TSMCT.db.profile.DataModuleEnabled); end, L["SlashCommandHelp"])
-	TSMAPI:RegisterIcon(L["TSMModuleIconText"],"Interface\\Icons\\Ability_Priest_Silence",function(...) TSMCT.Config:Load(...) end, addonName,"module")
+		-- TSM1.0 support
+	if not TSMAPI.NewModule then
+		-- TSM1.x support
+
+		TSMAPI:RegisterReleasedModule(addonName, TSMCT.Version, GetAddOnMetadata(addonName, "Author"), GetAddOnMetadata(addonName, "Notes"))
+		TSMAPI:RegisterSlashCommand('ctrack', function(...) TSMCT.TrackingEnable(not TSMCT.db.profile.DataModuleEnabled); end, L["SlashCommandHelp"])
+		TSMAPI:RegisterIcon(L["TSMModuleIconText"],"Interface\\Icons\\Ability_Priest_Silence",function(...) TSMCT.Config:Load(...) end, addonName,"module")
+	else
+		-- register with TSM (2.0)
+		TSMCT:RegisterModule()
+	end
 end
+
+
+-- registers this module with TSM by first setting all fields and then calling TSMAPI:NewModule().
+function TSMCT:RegisterModule()
+	TSMCT.icons = {
+		{
+			side="module",
+			desc=L["TSMModuleIconText"],
+			slashCommand = "ctrack",
+			callback="Config:Load",
+			icon="Interface\\Icons\\Ability_Priest_Silence"
+		},
+	}
+	
+	TSMAPI:NewModule(TSMCT)
+end
+
 
 function TSMCT:OnEnable()
 	TSMCT.db.factionrealm.loginTime = time()

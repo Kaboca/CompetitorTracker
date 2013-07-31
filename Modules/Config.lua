@@ -7,7 +7,7 @@ local AceGUI = LibStub("AceGUI-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local viewerST
 
-local configDB, dataDB
+local configDB, dataDB, charDB
 
 local CompetitorsTree = {
 	{ value=1, text = L["TreeOptions"], },
@@ -17,6 +17,7 @@ local CompetitorsTree = {
 function Config:Load(parent)
 	configDB  = TSMCT.db.profile
 	dataDB = TSMCT.db.factionrealm
+	charDB = TSMCT.db.char
 	
 	local treeGroup = AceGUI:Create("TSMTreeGroup")
 	treeGroup:SetLayout("Fill")
@@ -164,6 +165,32 @@ function Private.OptionsMain(parent)
 								if value == true then configDB.SyncCompetitors = true; else configDB.SyncCompetitors = false;	end
 							end,
 						},
+
+
+						{
+							type = "Slider",
+							value = charDB.Monitor.numRows,
+							label = L["OptMonitorMaxRowsLabel"],
+							relativeWidth = 0.5,
+							min = 3,
+							max = 50,
+							step = 1,
+							callback = function(_,_,value) charDB.Monitor.numRows = value end,
+							tooltip = L["OptMonitorMaxRowsInfo"],
+						},
+						
+						{
+							type = "Slider",
+							value = configDB.TrackNumRows,
+							label = L["OptTrackMaxRowsLabel"],
+							relativeWidth = 0.5,
+							min = 3,
+							max = 50,
+							step = 1,
+							callback = function(_,_,value) configDB.TrackNumRows = value end,
+							tooltip = L["OptTrackMaxRowsInfo"],
+						},
+						
 						
 					},
 				},
@@ -447,22 +474,6 @@ function Private.CreateCompetitorTabGroup(content,selectedChild)
 	return TabbedGroup
 end
 
--- Viewer Section --
-local viewerColInfo = {
-	{ name = L["VHeadTime"],     width = 0.2, },
-	{ name = L["VHeadPeriode"],  width = 0.2, },
-	{ name = L["VHeadLocation"], width = 0.6, },
-}
-
-local function GetColInfo(width)
-	local colInfo = CopyTable(viewerColInfo)
-	
-	for i=1, #colInfo do
-		colInfo[i].width = floor(colInfo[i].width*width)
-	end
-	
-	return colInfo
-end
 
 function GetHistoryData(competitor)
 	local rowData = {}
@@ -478,19 +489,19 @@ function GetHistoryData(competitor)
 		
 		for i=#history,1,-1 do
 			local itemData = history[i]
-			local timeR, TimeG
+			local timeColor
 			
 			if itemData.connected then
-				timeR, timeG = 0.0, 1.0
+				timeColor = "|cff00ff00"
 			else
-				timeR, timeG = 1.0, 0.0
+				timeColor = "|cffff0000"
 			end
 
 			tinsert(rowData, {
 				cols = {
 					{ value = TSMCT.GetFormattedTime(itemData.modified, "aidate") },
 					{ value = TSMCT.GetFormattedTime(itemData.periode, "period") },
-					{ value = itemData.location, color = { ["r"] = timeR, ["g"] = timeG, ["b"] = 0.0, ["a"] = 1.0, } },
+					{ value = timeColor..itemData.location.."|r" },
 				},
 			})
 		end
@@ -543,9 +554,9 @@ function Private.PersonHistory(container,name)
 					}
 				},
 				{
-					type = "SimpleGroup",
-					layout = "Flow",
+					type = "ScrollFrame", -- simple group didn't work here for some reason
 					fullHeight = true,
+					layout = "Flow",
 					children = {},
 				},
 			}
@@ -555,24 +566,24 @@ function Private.PersonHistory(container,name)
 	TSMAPI:BuildPage(container, page)
 
 	-- scrolling table
-	local colInfo = GetColInfo(container.frame:GetWidth())
 	local stParent = container.children[1].children[#container.children[1].children].frame
 
 	if not viewerST then
-		viewerST = TSMAPI:CreateScrollingTable(colInfo, true)
+		local stCols = {
+			{ name = L["VHeadTime"],     width = 0.2, },
+			{ name = L["VHeadPeriode"],  width = 0.2, },
+			{ name = L["VHeadLocation"], width = 0.6, },
+		}
+		
+		viewerST = TSMAPI:CreateScrollingTable(stParent, stCols, nil, configDB.TrackNumRows)
+		viewerST:EnableSorting(false)
+		viewerST:DisableSelection(true)
 	end
 
-	viewerST.frame:SetParent(stParent)
-	viewerST.frame:SetPoint("BOTTOMLEFT")
-	viewerST.frame:SetPoint("TOPRIGHT", 0, -20)
-	viewerST.frame:SetScript("OnSizeChanged", function(_,width, height)
-			viewerST:SetDisplayCols(GetColInfo(width))
-			viewerST:SetDisplayRows(floor(height/16), 16)
-		end)
 	viewerST:Show()
+	viewerST:SetParent(stParent)
+	viewerST:SetAllPoints()
+
 	viewerST:SetData(GetHistoryData(competitor))
-	for i, col in ipairs(viewerST.head.cols) do
-		col:SetHeight(32)
-	end
 end
 

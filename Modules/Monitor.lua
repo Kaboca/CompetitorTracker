@@ -27,23 +27,6 @@ function Monitor:OnDisable()
 	TSMCT:Print(L["MonitorDisabled"])
 end
 
-local viewerColInfo = {
-	{name = L["MHeadName"], width = 0.25,},
-	{name = L["MHeadLocation"],	width = 0.25,},
-	{name = L["MHeadBefore"],width = 0.25,},
-	{name = L["MHeadNow"],width = 0.25,},
-}
-
-local function GetColInfo(width)
-	local colInfo = CopyTable(viewerColInfo)
-	
-	for i=1, #colInfo do
-		colInfo[i].width = floor(colInfo[i].width*width)
-	end
-	
-	return colInfo
-end
-
 function GetSTData()
 	local compList, rowData = {}, {}
 	
@@ -56,29 +39,28 @@ function GetSTData()
 	--for i=1,math.min(#compList,6) do
 	for i=1,#compList do
 		local itemData = compList[i]
-		local nameR, nameG, nameB
-		local timeR, TimeG
+		local nameColor, timeColor
 		
 		if itemData.connected then
-			nameR, nameG, nameB = 0.0, 1.0, 0.0
-			timeR, timeG = 0.0, 1.0
+			nameColor = "|cff00ff00"
+			timeColor = "|cff00ff00"
 		else
-			nameR, nameG, nameB = 1.0, 0.0, 0.0
-			timeR, timeG = 1.0, 0.0
+			nameColor = "|cffff0000"
+			timeColor = "|cffff0000"
 		end
 		
 		if not itemData.inFriendList then
-			nameR, nameG, nameB = 0.0, 0.0, 1.0
+			nameColor = "|cff0000ff"
 		end
 
 		--if not itemData.previous then itemData.previous = 0 end
 		
 		tinsert(rowData, {
 			cols = {
-				{ value = itemData.name, color = { ["r"] = nameR, ["g"] = nameG, ["b"] = nameB, ["a"] = 1.0, } },
+				{ value = nameColor..itemData.name.."|r" },
 				{ value = itemData.location	},
 				{ value = TSMCT.GetFormattedTime(itemData.previous, "period")},
-				{ value = TSMCT.GetFormattedTime(itemData.modified, "ago") , color = { ["r"] = timeR, ["g"] = timeG, ["b"] = 0.0, ["a"] = 1.0, } },
+				{ value = timeColor..TSMCT.GetFormattedTime(itemData.modified, "ago").."|r"},
 			},
 		})
 	end
@@ -99,36 +81,34 @@ function Monitor:CreateWindowWidget()
 	Monitor:SecureHook(monitorWindow.frame, "StopMovingOrSizing", Monitor.StopMovingOrSizing)
 	
 	local parentFrame = monitorWindow.content
-	local colInfo = GetColInfo(parentFrame:GetWidth())
 	
 	if viewerST then 
 		viewerST:Hide() 
 	else
-		viewerST = TSMAPI:CreateScrollingTable(colInfo, true)
-		viewerST.frame:SetScript("OnSizeChanged", function(_,width, height)
-			viewerST:SetDisplayCols(GetColInfo(width))
-			viewerST:SetDisplayRows(floor(height/16), 16)
-		end)
+		local stCols = {
+			{name = L["MHeadName"], width = 0.25,},
+			{name = L["MHeadLocation"],	width = 0.25,},
+			{name = L["MHeadBefore"],width = 0.25,},
+			{name = L["MHeadNow"],width = 0.25,},
+		}
 		
-		--hack: TSM too high thumbText (150)
-		local scrollBar = _G[viewerST.scrollframe:GetName().."ScrollBar"]
-		local thumbTex = scrollBar:GetThumbTexture()
-		thumbTex:SetHeight(30)
+		local handlers = {}
+		
+		viewerST = TSMAPI:CreateScrollingTable(parentFrame, stCols, handlers, db.numRows)
+		viewerST:EnableSorting(false)
+		viewerST:DisableSelection(true)
 	end
 
-	for i, col in ipairs(viewerST.head.cols) do
-		col:SetHeight(32)
-	end
-
-	viewerST.frame:SetParent(parentFrame)
-	viewerST.frame:SetPoint("BOTTOMLEFT")
-	viewerST.frame:SetPoint("TOPRIGHT",0,-20)
 	viewerST:Show()
+	viewerST:SetParent(parentFrame)
+	
+	--viewerST:SetPoint("BOTTOMLEFT")
+	--viewerST:SetPoint("TOPRIGHT",0,-20)
+	
 end
 
 function Monitor:Update()
 	viewerST:SetData(GetSTData())
-	viewerST:Refresh();
 end
 
 function Monitor:StopMovingOrSizing()
