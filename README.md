@@ -1,6 +1,6 @@
 == WARNING: This is not an official TradeSkillMaster module==
 
-== TradeSkillMaster_CompetitorTracker ==
+== TradeSkillMaster_CompetitorTracker for TSM V2.0==
 This is a module for [[http://www.curse.com/addons/wow/tradeskill-master|TradeSkillMaster]] that reports when WoW Auction House Competitors are online/offline and also saves this data for all characters on the same realm and faction.
 
 If enabled the sync feature and then you add or remove someone from your friends list and relog to an alt, 

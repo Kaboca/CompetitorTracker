@@ -27,8 +27,8 @@ local savedDBDefaults = {
 			offsetX = 0,
 			offsetY = 0,
 			width=300,
-			height=100,
-			numRows=10,
+			height=200,
+			numRows=5,
 		},
 	},
 	

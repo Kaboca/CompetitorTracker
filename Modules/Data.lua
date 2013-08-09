@@ -118,6 +118,7 @@ function Data:BucketEventHandler()
 					competitor.level=level
 					competitor.class=class
 					competitor.location=location
+					competitor.status=status
 					if friendNote and (not competitor.friendNote or competitor.friendNote ~= friendNote) then
 						competitor.friendNote = friendNote
 					end
@@ -174,5 +175,4 @@ end
 
 function Data.RefreshFriendlist()
 	ShowFriends()
-	--TSMCT:Printf(">")
 end

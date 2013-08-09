@@ -166,6 +166,15 @@ function Private.OptionsMain(parent)
 							end,
 						},
 
+						{
+							type = "Spacer",
+							quantity = 2,
+						},
+						{
+							type = "Label",
+							relativeWidth = 1,
+							text = "|cffffffffTSM V2.0|r",
+						},
 
 						{
 							type = "Slider",
