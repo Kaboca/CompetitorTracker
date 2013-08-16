@@ -51,7 +51,6 @@ function Private.SelectTree(treeFrame, _, selection)
 	content:DoLayout()
 		
 	local selectedParent, selectedChild, selectedSubChild = ("\001"):split(selection)
-	--print(selectedParent, selectedChild, selectedSubChild)
 	
 	if not selectedChild or tonumber(selectedchild) == 0 then
 		if tonumber(selectedParent) == 1 then
@@ -132,11 +131,17 @@ function Private.OptionsMain(parent)
 							tooltip = L["OptMonitorModuleEnabledInfo"],
 							callback = function(_,_,value) TSMCT.MonitoringEnable(value) end,
 						},
+
+						{
+							type = "Spacer",
+							quantity = 2,
+						},
+
 						{
 							type = "CheckBox",
 							value = configDB.TrackMarked,
 							label = L["OptTrackMakedLabel"],
-							fullWidth = false,
+							relativeWidth = 0.5,
 							disabled = false,
 							tooltip = L["OptTrackMakedInfo"],
 							callback = function(_,_,value) 
@@ -158,7 +163,6 @@ function Private.OptionsMain(parent)
 							type = "CheckBox",
 							value = configDB.SyncCompetitors,
 							label = L["OptSyncLabel"],
-							fullWidth = false,
 							disabled = false,
 							tooltip = L["OptSyncInfo"],
 							callback = function(_,_,value) 
@@ -170,6 +174,38 @@ function Private.OptionsMain(parent)
 							type = "Spacer",
 							quantity = 2,
 						},
+
+						{
+							type = "Dropdown",
+							label = L["OptDefaultChatLabel"],
+							relativeWidth = 0.5,
+							list = TSMCT.GetChatFrameNames(),
+							value = configDB.ChatFrame,
+							multiselect = false,
+							callback = function(_, _, key)
+								configDB.ChatFrame = key
+								TSMCT.SetChatFrame()
+								TSMCT:Chat(1,"ChatFrame:%s",configDB.ChatFrame)
+							end,
+							tooltip = L["OptDefaultChatInfo"],
+						},
+						{
+							type = "Slider",
+							value = configDB.ChatLevel,
+							label = L["OptChatLevelLabel"],
+							relativeWidth = 0.5,
+							min = 1,
+							max = 5,
+							step = 1,
+							callback = function(_,_,value) configDB.ChatLevel = value end,
+							tooltip = L["OptChatLevelInfo"],
+						},
+
+						{
+							type = "Spacer",
+							quantity = 2,
+						},
+
 						{
 							type = "Label",
 							relativeWidth = 1,
@@ -486,7 +522,6 @@ end
 
 function GetHistoryData(competitor)
 	local rowData = {}
-	--TSMCT:Print(competitor.name)
 	
 	if competitor.records and #competitor.records > 0 then 
 		local history = CopyTable(competitor.records)

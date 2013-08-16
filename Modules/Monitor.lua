@@ -8,7 +8,7 @@ local viewerST
 local db 
 
 function Monitor:OnEnable()
-	TSMCT:Print(L["MonitorEnabled"])
+	TSMCT:Chat(2,L["MonitorEnabled"])
 	db = TSMCT.db.char.Monitor
 	
 	Monitor:CreateWindowWidget()
@@ -24,7 +24,7 @@ function Monitor:OnDisable()
 		Monitor.Window:Hide()
 	end
 
-	TSMCT:Print(L["MonitorDisabled"])
+	TSMCT:Chat(2,L["MonitorDisabled"])
 end
 
 function GetSTData()

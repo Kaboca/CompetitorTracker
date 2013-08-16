@@ -6,7 +6,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local competitors, deletedCompetitors, configDB, removedInThisSession
 
 function Data:OnEnable()
-	TSMCT:Print(L["DataEnabled"])
+	TSMCT:Chat(2,L["DataEnabled"])
 	
 	competitors=TSMCT.db.factionrealm.competitors
 	deletedCompetitors = TSMCT.db.factionrealm.deleted
@@ -24,7 +24,7 @@ function Data:OnDisable()
 		Data:UnregisterBucket(Data.UpdateHandle)
 	end
 
-	TSMCT:Print(L["DataDisabled"])
+	TSMCT:Chat(2,L["DataDisabled"])
 end
 
 function Data.Update()
@@ -36,27 +36,26 @@ function Data.Update()
 		if name then
 			friendList[name] = i
 			noteList[name] = friendNote
-			--TSMCT:Printf("Checking>%s",name)
 			count=count+1
 		else
-			TSMCT:Print(L["DataFriendListWait"])
+			TSMCT:Chat(4,L["DataFriendListWait"])
 			ShowFriends()
 			return false
 		end
 	end
-	TSMCT:Printf(L["DataFriendCount"],count)
+	TSMCT:Chat(4,L["DataFriendCount"],count)
 	TSMAPI:CancelFrame("CompTrackerDataUpdate")
 	
 	if TSMCT.db.profile.SyncCompetitors then
 		for name,v in pairs(friendList) do
 			if deletedCompetitors[name] then
-				TSMCT:Printf(L["DataRemove"], name)
+				TSMCT:Chat(3,L["DataRemove"], name)
 				RemoveFriend(name)
 				removedInThisSession[name] = true
 			else
 				if competitors[name] and competitors[name].friendNote then
 					if not noteList[name] or noteList[name] ~= competitors[name].friendNote then
-						TSMCT:Printf(L["DataSetNote"],competitors[name].friendNote, name)
+						TSMCT:Chat(3,L["DataSetNote"],competitors[name].friendNote, name)
 						SetFriendNotes(name, competitors[name].friendNote)
 					end
 				end
@@ -65,7 +64,7 @@ function Data.Update()
 		
 		for name, v in pairs(competitors) do
 			if not friendList[name] and not v.RemoveTime then
-				TSMCT:Printf(L["DataAddFriend"], name)
+				TSMCT:Chat(3,L["DataAddFriend"], name)
 				AddFriend(name)
 				v.RecentlyAddedByTheTracker = time()
 			end
@@ -79,7 +78,7 @@ function Data.Update()
 end
 
 function Data:BucketEventHandler()
-	TSMCT:Print(L["DataChecking"])
+	TSMCT:Chat(5,L["DataChecking"])
 
 	for _, v in pairs(competitors) do
 		v.inFriendList = false
@@ -91,7 +90,6 @@ function Data:BucketEventHandler()
 		if name and not removedInThisSession[name] then
 			if connected then connected=true else connected=false end
 
-			--TSMCT:Print(name)
 			local competitor = competitors[name]
 
 			if competitor then
@@ -108,7 +106,7 @@ function Data:BucketEventHandler()
 					table.insert(competitor.records, record)
 					if #competitor.records > configDB.TrackMaxRecord then
 						local removed = table.remove(competitor.records, 1)
-						TSMCT:Printf(L["DataRemovedRecord"], competitor.name, TSMCT.GetFormattedTime(removed.modified,"aidate"))
+						TSMCT:Chat(4,L["DataRemovedRecord"], competitor.name, TSMCT.GetFormattedTime(removed.modified,"aidate"))
 					end
 					
 					competitor.connected=connected
@@ -129,9 +127,9 @@ function Data:BucketEventHandler()
 					
 					if deletedCompetitors[name] then
 						deletedCompetitors[name] = nil
-						TSMCT:Printf(L["DataRemoveFromDeleted"],name)
+						TSMCT:Chat(3,L["DataRemoveFromDeleted"],name)
 					else
-						TSMCT:Printf(L["DataRegister"],name)
+						TSMCT:Chat(3,L["DataRegister"],name)
 					end
 					
 					competitor = { records={} }
@@ -156,7 +154,7 @@ function Data:BucketEventHandler()
 		if not v.inFriendList and not v.RecentlyAddedByTheTracker then
 			if not v.RemoveTime then
 				v.RemoveTime = time() + 120 
-				TSMCT:Printf(L["DataWillBeDeleted"],k, TSMCT.GetFormattedTime(v.RemoveTime, "fromnow"))
+				TSMCT:Chat(4,L["DataWillBeDeleted"],k, TSMCT.GetFormattedTime(v.RemoveTime, "fromnow"))
 				TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", 130, Data.RefreshFriendlist,15)	
 			elseif v.RemoveTime < time() then
 				TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
@@ -170,7 +168,7 @@ end
 function Data.DeleteCompetitorData(name)
 	wipe(competitors[name])
 	competitors[name] = nil
-	TSMCT:Printf(L["DataDelete"],name)
+	TSMCT:Chat(3,L["DataDelete"],name)
 end
 
 function Data.RefreshFriendlist()

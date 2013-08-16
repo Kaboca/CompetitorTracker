@@ -89,6 +89,11 @@ L["OptMonitorMaxRowsInfo"] = "Number of Monitor Window Rows (Requires Reload)."
 L["OptTrackMaxRowsLabel"] = "History List Rows"
 L["OptTrackMaxRowsInfo"] = "Number of rows displayed (Requires Reload)."
 
+L["OptDefaultChatLabel"] = "Default Chat Window"
+L["OptDefaultChatInfo"] = "Allows selection of which chat window to display messages"
+
+L["OptChatLevelLabel"] = "Verbosity"
+L["OptChatLevelInfo"] = "Only the lower level messages will be printed"
 --@end-do-not-package@
 
 

@@ -9,6 +9,8 @@ local AceGUI = LibStub("AceGUI-3.0")
 TSMCT.Version = GetAddOnMetadata(addonName, "Version")
 TSMCT.DBVersion = 1
 TSMCT.DBName = addonName.."DB" -- GetAddOnMetadata(addonName, "SavedVariables")
+TSMCT.CF = DEFAULT_CHAT_FRAME
+
 
 local savedDBDefaults = { 
 	factionrealm = {
@@ -43,6 +45,8 @@ local savedDBDefaults = {
 		TrackMaxRecord = 20,
 		TrackNumRows = 26,
 		SyncCompetitors = false,
+		ChatFrame = "ChatFrame1",
+		ChatLevel = 5,
 	},
 }
 
@@ -52,23 +56,12 @@ function TSMCT:OnInitialize()
 	end
 
 	TSMCT.db = LibStub:GetLibrary("AceDB-3.0"):New(addonName.."DB", savedDBDefaults, true)
-	
-		-- TSM1.0 support
-	if not TSMAPI.NewModule then
-		-- TSM1.x support
-
-		TSMAPI:RegisterReleasedModule(addonName, TSMCT.Version, GetAddOnMetadata(addonName, "Author"), GetAddOnMetadata(addonName, "Notes"))
-		TSMAPI:RegisterSlashCommand('ctrack', function(...) TSMCT.TrackingEnable(not TSMCT.db.profile.DataModuleEnabled); end, L["SlashCommandHelp"])
-		TSMAPI:RegisterIcon(L["TSMModuleIconText"],"Interface\\Icons\\Ability_Priest_Silence",function(...) TSMCT.Config:Load(...) end, addonName,"module")
-	else
-		-- register with TSM (2.0)
-		TSMCT:RegisterModule()
-	end
+	TSMCT.RegisterModule()
 end
 
 
 -- registers this module with TSM by first setting all fields and then calling TSMAPI:NewModule().
-function TSMCT:RegisterModule()
+function TSMCT.RegisterModule()
 	TSMCT.icons = {
 		{
 			side="module",
@@ -84,8 +77,10 @@ end
 
 
 function TSMCT:OnEnable()
+	TSMCT.SetChatFrame()
 	TSMCT.db.factionrealm.loginTime = time()
-	TSMCT:Printf(L["VersionText"],TSMCT.Version)
+
+	TSMCT:Chat(2,L["VersionText"],TSMCT.Version)
 	
 	if TSMCT.db.profile.DataModuleEnabled then 
 		TSMCT:EnableModule("Data")
@@ -150,3 +145,42 @@ function TSMCT.MonitoringEnable(enable)
 		TSMCT:DisableModule("Monitor")
 	end
 end
+
+function TSMCT:Chat(...)
+	level = select(1,...)
+	if level <= TSMCT.db.profile.ChatLevel then 
+		if select("#",...) > 2 then
+			TSMCT:Printf(TSMCT.CF, select(2,...))
+		else
+			TSMCT:Print(TSMCT.CF, select(2,...))
+		end
+	end
+end
+
+function TSMCT.SetChatFrame()
+	TSMCT.CF = DEFAULT_CHAT_FRAME
+	
+	for n = 1, 10 do
+		local frm = _G["ChatFrame" .. n]
+		if frm then
+			if frm["name"] == TSMCT.db.profile.ChatFrame then
+				TSMCT.CF = frm
+				break
+			end
+		end
+	end
+end
+
+function TSMCT.GetChatFrameNames()
+	local frameNames = {}
+
+	for n = 1, 10 do
+		local frm = _G["ChatFrame" .. n]
+		if frm and frm["name"] then
+			frameNames[frm["name"]]=frm["name"]
+		end
+	end
+
+	return frameNames
+end
+
