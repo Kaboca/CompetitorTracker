@@ -176,20 +176,6 @@ function Private.OptionsMain(parent)
 						},
 
 						{
-							type = "Dropdown",
-							label = L["OptDefaultChatLabel"],
-							relativeWidth = 0.5,
-							list = TSMCT.GetChatFrameNames(),
-							value = configDB.ChatFrame,
-							multiselect = false,
-							callback = function(_, _, key)
-								configDB.ChatFrame = key
-								TSMCT.SetChatFrame()
-								TSMCT:Chat(1,"ChatFrame:%s",configDB.ChatFrame)
-							end,
-							tooltip = L["OptDefaultChatInfo"],
-						},
-						{
 							type = "Slider",
 							value = configDB.ChatLevel,
 							label = L["OptChatLevelLabel"],
@@ -201,42 +187,6 @@ function Private.OptionsMain(parent)
 							tooltip = L["OptChatLevelInfo"],
 						},
 
-						{
-							type = "Spacer",
-							quantity = 2,
-						},
-
-						{
-							type = "Label",
-							relativeWidth = 1,
-							text = "|cffffffffTSM V2.0|r",
-						},
-
-						{
-							type = "Slider",
-							value = charDB.Monitor.numRows,
-							label = L["OptMonitorMaxRowsLabel"],
-							relativeWidth = 0.5,
-							min = 3,
-							max = 50,
-							step = 1,
-							callback = function(_,_,value) charDB.Monitor.numRows = value end,
-							tooltip = L["OptMonitorMaxRowsInfo"],
-						},
-						
-						{
-							type = "Slider",
-							value = configDB.TrackNumRows,
-							label = L["OptTrackMaxRowsLabel"],
-							relativeWidth = 0.5,
-							min = 3,
-							max = 50,
-							step = 1,
-							callback = function(_,_,value) configDB.TrackNumRows = value end,
-							tooltip = L["OptTrackMaxRowsInfo"],
-						},
-						
-						
 					},
 				},
 			},
@@ -619,7 +569,7 @@ function Private.PersonHistory(container,name)
 			{ name = L["VHeadLocation"], width = 0.6, },
 		}
 		
-		viewerST = TSMAPI:CreateScrollingTable(stParent, stCols, nil, configDB.TrackNumRows)
+		viewerST = TSMAPI:CreateScrollingTable(stParent, stCols)
 		viewerST:EnableSorting(false)
 		viewerST:DisableSelection(true)
 	end

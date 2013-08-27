@@ -94,7 +94,7 @@ function Monitor:CreateWindowWidget()
 		
 		local handlers = {}
 		
-		viewerST = TSMAPI:CreateScrollingTable(parentFrame, stCols, handlers, db.numRows)
+		viewerST = TSMAPI:CreateScrollingTable(parentFrame, stCols, handlers)
 		viewerST:EnableSorting(false)
 		viewerST:DisableSelection(true)
 	end

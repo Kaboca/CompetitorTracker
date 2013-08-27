@@ -9,7 +9,6 @@ local AceGUI = LibStub("AceGUI-3.0")
 TSMCT.Version = GetAddOnMetadata(addonName, "Version")
 TSMCT.DBVersion = 1
 TSMCT.DBName = addonName.."DB" -- GetAddOnMetadata(addonName, "SavedVariables")
-TSMCT.CF = DEFAULT_CHAT_FRAME
 
 
 local savedDBDefaults = { 
@@ -77,7 +76,6 @@ end
 
 
 function TSMCT:OnEnable()
-	TSMCT.SetChatFrame()
 	TSMCT.db.factionrealm.loginTime = time()
 
 	TSMCT:Chat(2,L["VersionText"],TSMCT.Version)
@@ -150,37 +148,9 @@ function TSMCT:Chat(...)
 	level = select(1,...)
 	if level <= TSMCT.db.profile.ChatLevel then 
 		if select("#",...) > 2 then
-			TSMCT:Printf(TSMCT.CF, select(2,...))
+			TSMCT:Printf(select(2,...))
 		else
-			TSMCT:Print(TSMCT.CF, select(2,...))
+			TSMCT:Print(select(2,...))
 		end
 	end
 end
-
-function TSMCT.SetChatFrame()
-	TSMCT.CF = DEFAULT_CHAT_FRAME
-	
-	for n = 1, 10 do
-		local frm = _G["ChatFrame" .. n]
-		if frm then
-			if frm["name"] == TSMCT.db.profile.ChatFrame then
-				TSMCT.CF = frm
-				break
-			end
-		end
-	end
-end
-
-function TSMCT.GetChatFrameNames()
-	local frameNames = {}
-
-	for n = 1, 10 do
-		local frm = _G["ChatFrame" .. n]
-		if frm and frm["name"] then
-			frameNames[frm["name"]]=frm["name"]
-		end
-	end
-
-	return frameNames
-end
-
