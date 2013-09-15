@@ -22,14 +22,11 @@ local savedDBDefaults = {
 
 	char = {
 		["Monitor"] = {
-			point="CENTER",
-			relativeTo="",
-			relativePoint="CENTER",
-			offsetX = 0,
-			offsetY = 0,
-			width=300,
-			height=200,
-			numRows=5,
+			version = 0,
+			status = {
+				width=300,
+				height=200,
+			},
 		},
 	},
 	

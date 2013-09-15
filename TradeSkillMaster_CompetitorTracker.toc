@@ -1,4 +1,4 @@
-## Interface: 50300
+## Interface: 50400
 ## Title: |cff00ff00TradeSkillMaster_CompetitorTracker|r
 ## Notes: TradeSkillMaster module for Competitor`s online / offline status tracking
 ## Author: Kaboca/HU

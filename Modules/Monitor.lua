@@ -11,15 +11,24 @@ function Monitor:OnEnable()
 	TSMCT:Chat(2,L["MonitorEnabled"])
 	db = TSMCT.db.char.Monitor
 	
+	if db.version < 2 then
+		Monitor.ResetDB()
+	end
+	
 	Monitor:CreateWindowWidget()
 	Monitor.Window:Show()
-	
+
 	TSMAPI:CreateTimeDelay("CompMonitorUpdate", 10, Monitor.Update, 10)
 end
 
 function Monitor:OnDisable()
 	TSMAPI:CancelFrame("CompMonitorUpdate")
+	Monitor:UnhookAll()
 	
+	if viewerST then 
+		viewerST:Hide() 
+	end
+
 	if Monitor.Window then
 		Monitor.Window:Hide()
 	end
@@ -72,13 +81,9 @@ function Monitor:CreateWindowWidget()
 	local monitorWindow = AceGUI:Create("CTMWindow")
 	Monitor.Window = monitorWindow
 	
-	monitorWindow:SetWidth(db.width)
-	monitorWindow:SetHeight(db.height)
-	monitorWindow:SetPoint(db.point, UIParent, db.relativePoint, db.offsetX, db.offsetY)
-	
+	monitorWindow:SetStatusTable(db.status)
 	monitorWindow:SetTitle(L["MonitorTitle"])
-	
-	Monitor:SecureHook(monitorWindow.frame, "StopMovingOrSizing", Monitor.StopMovingOrSizing)
+	Monitor:SecureHook(monitorWindow.frame, "Hide", Monitor.MonitorHide)
 	
 	local parentFrame = monitorWindow.content
 	
@@ -101,25 +106,27 @@ function Monitor:CreateWindowWidget()
 
 	viewerST:Show()
 	viewerST:SetParent(parentFrame)
-	
-	--viewerST:SetPoint("BOTTOMLEFT")
-	--viewerST:SetPoint("TOPRIGHT",0,-20)
-	
 end
 
 function Monitor:Update()
 	viewerST:SetData(GetSTData())
 end
 
-function Monitor:StopMovingOrSizing()
-	local point, relativeTo, relativePoint, xOfs, yOfs = Monitor.Window:GetPoint(1)
-	
-	db.point=point
-    db.relativeTo=relativeTo
-    db.relativePoint=relativePoint
-    db.offsetX=xOfs
-    db.offsetY=yOfs
-	
-    db.width=Monitor.Window.frame:GetWidth()
-    db.height=Monitor.Window.frame:GetHeight()
+function Monitor.MonitorHide()
+	TSMCT.MonitoringEnable(false)
+end
+
+function Monitor.ResetDB()
+	if db and db.version < 2 then
+		db.version = 2
+		
+		db.point = nil
+		db.relativePoint = nil
+		db.height = nil
+		db.offsetY = nil
+		db.offsetX = nil
+		db.width = nil
+
+		TSMCT:Chat(1,"Monitor-Window position data cleaned and upgraded according to the new addon version.")
+	end
 end
