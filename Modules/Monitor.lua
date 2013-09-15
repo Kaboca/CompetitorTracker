@@ -106,6 +106,8 @@ function Monitor:CreateWindowWidget()
 
 	viewerST:Show()
 	viewerST:SetParent(parentFrame)
+	viewerST:SetAllPoints()
+	viewerST:SetData(GetSTData())
 end
 
 function Monitor:Update()

@@ -33,25 +33,25 @@ end
 
 local function frameOnMouseUp(frame)
 	frame:StopMovingOrSizing()
+	AceGUI:ClearFocus()
+
+	local self = frame.obj
+	local status = self.status or self.localstatus
+	
+	status.width = frame:GetWidth()
+	status.height = frame:GetHeight()
+	status.top = frame:GetTop()
+	status.left = frame:GetLeft()
 end
 
-local function sizerseOnMouseDown(sizerFrame)
+local function sizerOnMouseDown(sizerFrame)
 	sizerFrame:GetParent():StartSizing("BOTTOMRIGHT")
 	AceGUI:ClearFocus()
 end
 
-local function sizersOnMouseDown(sizerFrame)
-	sizerFrame:GetParent():StartSizing("BOTTOM")
-	AceGUI:ClearFocus()
-end
-
-local function sizereOnMouseDown(sizerFrame)
-	sizerFrame:GetParent():StartSizing("RIGHT")
-	AceGUI:ClearFocus()
-end
-
 local function sizerOnMouseUp(sizerFrame)
-	sizerFrame:GetParent():StopMovingOrSizing()
+	local frame = sizerFrame:GetParent()
+	frameOnMouseUp(frame)
 end
 
 
@@ -70,9 +70,7 @@ local methods = {
 	
 	["OnRelease"] = function(self)
 		self.status = nil
-		for k in pairs(self.localstatus) do
-			self.localstatus[k] = nil
-		end
+		wipe(self.localstatus)
 	end,
 	
 	["Show"] = function(self)
@@ -87,11 +85,18 @@ local methods = {
 		self.titletext:SetText(title)
 	end,
 	
+	-- called to set an external table to store status in
+	["SetStatusTable"] = function(self, status)
+		assert(type(status) == "table")
+		self.status = status
+		self:ApplyStatus()
+	end,
+
 	["ApplyStatus"] = function(self)
 		local status = self.status or self.localstatus
 		local frame = self.frame
-		self:SetWidth(status.width or 700)
-		self:SetHeight(status.height or 500)
+		self:SetWidth(status.width or 300)
+		self:SetHeight(status.height or 200)
 		if status.top and status.left then
 			frame:SetPoint("TOP",UIParent,"BOTTOM",0,status.top)
 			frame:SetPoint("LEFT",UIParent,"LEFT",status.left,0)
@@ -103,9 +108,7 @@ local methods = {
 	["EnableResize"] = function(self, state)
 		local func = state and "Show" or "Hide"
 		
-		self.sizer_se[func](self.sizer_se)
-		self.sizer_s[func](self.sizer_s)
-		self.sizer_e[func](self.sizer_e)
+		self.sizer[func](self.sizer)
 	end,
 	
 	
@@ -140,8 +143,8 @@ local function Constructor()
 	local contentFrameName = Type.."Content"..unicID
 	
 	local frame = CreateFrame("Frame",frameName,  UIParent)
-	frame:SetWidth(300)
-	frame:SetHeight(150)
+	frame:Hide()
+	
 	frame:SetPoint("CENTER")
 	frame:EnableMouse(true)
 	frame:SetMovable(true)
@@ -150,7 +153,7 @@ local function Constructor()
 	frame:SetScript("OnMouseDown", frameOnMouseDown)
 	frame:SetScript("OnMouseUp", frameOnMouseUp)
 	frame:SetScript("OnHide", frameOnClose)
-	frame:SetMinResize(250,100)
+	frame:SetMinResize(250,125)
 	TSMAPI.Design:SetFrameBackdropColor(frame)
 	
 	local close = CreateFrame("Button", nil, frame, "UIPanelCloseButton")
@@ -168,68 +171,35 @@ local function Constructor()
 	line:SetHeight(2)
 	TSMAPI.Design:SetIconRegionColor(line)
 	
-	local sizer_se = CreateFrame("Frame",nil,frame)
-	sizer_se:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",0,0)
-	sizer_se:SetWidth(25)
-	sizer_se:SetHeight(25)
-	sizer_se:EnableMouse()
-	sizer_se:SetScript("OnMouseDown",sizerseOnMouseDown)
-	sizer_se:SetScript("OnMouseUp", sizerOnMouseUp)
+	local sizer = CreateFrame("Frame",nil,frame)
+	sizer:SetPoint("BOTTOMRIGHT", -2, 2)
+	sizer:SetWidth(20)
+	sizer:SetHeight(20)
+	sizer:EnableMouse()
+	sizer:SetScript("OnMouseDown",sizerOnMouseDown)
+	sizer:SetScript("OnMouseUp", sizerOnMouseUp)
+	local image = sizer:CreateTexture(nil, "BACKGROUND")
+	image:SetAllPoints()
+	image:SetTexture("Interface\\Addons\\TradeSkillMaster\\Media\\Sizer")
 	
-	local line1 = sizer_se:CreateTexture(nil, "BACKGROUND")
-	line1:SetWidth(14)
-	line1:SetHeight(14)
-	line1:SetPoint("BOTTOMRIGHT", -8, 8)
-	line1:SetTexture("Interface\\Tooltips\\UI-Tooltip-Border")
-	local x = 0.1 * 14/17
-	line1:SetTexCoord(0.05 - x, 0.5, 0.05, 0.5 + x, 0.05, 0.5 - x, 0.5 + x, 0.5)
-
-	local line2 = sizer_se:CreateTexture(nil, "BACKGROUND")
-	line2:SetWidth(8)
-	line2:SetHeight(8)
-	line2:SetPoint("BOTTOMRIGHT", -8, 8)
-	line2:SetTexture("Interface\\Tooltips\\UI-Tooltip-Border")
-	local x = 0.1 * 8/17
-	line2:SetTexCoord(0.05 - x, 0.5, 0.05, 0.5 + x, 0.05, 0.5 - x, 0.5 + x, 0.5)
-	
-	local sizer_s = CreateFrame("Frame",nil,frame)
-	sizer_s:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",-25,0)
-	sizer_s:SetPoint("BOTTOMLEFT",frame,"BOTTOMLEFT",0,0)
-	sizer_s:SetHeight(25)
-	sizer_s:EnableMouse()
-	sizer_s:SetScript("OnMouseDown",sizersOnMouseDown)
-	sizer_s:SetScript("OnMouseUp", sizerOnMouseUp)
-		
-	local sizer_e = CreateFrame("Frame",nil,frame)
-	sizer_e:SetPoint("BOTTOMRIGHT",frame,"BOTTOMRIGHT",0,25)
-	sizer_e:SetPoint("TOPRIGHT",frame,"TOPRIGHT",0,0)
-	sizer_e:SetWidth(25)
-	sizer_e:EnableMouse()
-	sizer_e:SetScript("OnMouseDown",sizereOnMouseDown)
-	sizer_e:SetScript("OnMouseUp", sizerOnMouseUp)
-
-
 	--Container Support
 	local content = CreateFrame("Frame", contentFrameName, frame)
 	content:SetPoint("TOPLEFT", frame, "TOPLEFT", 12, -32)
 	content:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", -12, 13)
 	
 	local widget = {
+		type = Type,
+
 		frame = frame,
 		content = content,
-
-		type = Type,
-		localstatus = {},
+		sizer = sizer,
 		title = title,
 		titletext = titletext,
 		closebutton = close,
-		
-		sizer_se = sizer_se,
-		line1 = line1,
-		line2 = line2,
-		sizer_s = sizer_s,
-		sizer_e = sizer_e,
+
+		localstatus = {},
 	}
+	
 	for method, func in pairs(methods) do
 		widget[method] = func
 	end

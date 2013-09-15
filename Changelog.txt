@@ -1,3 +1,6 @@
+==V5.4.0.11-Release==
+* Fixed: Accidentally an older version of the CTMWindow file has been included in the package. Sorry about that.
+
 ==V5.4.0.10-Release==
 * Updated TOC for patch 5.4. 
 * Monitor Window
