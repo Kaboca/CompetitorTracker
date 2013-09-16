@@ -23,6 +23,7 @@ local savedDBDefaults = {
 	char = {
 		["Monitor"] = {
 			version = 0,
+			NotesColumn = 1,
 			status = {
 				width=300,
 				height=200,

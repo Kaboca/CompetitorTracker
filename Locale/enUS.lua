@@ -29,6 +29,7 @@ L["MonitorDisabled"] = "Monitor module disabled."
 
 L["MHeadName"] = "Name"
 L["MHeadLocation"] = "Location"
+L["MHeadNotes"] = "Notes"
 L["MHeadBefore"] = "Before"
 L["MHeadNow"] = "Now"
 --@end-do-not-package@

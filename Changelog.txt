@@ -1,5 +1,7 @@
 ==V5.4.0.12-Beta==
-*  Ticket 3: Add command line to +toggle monitor window+
+* +Ticket 3+: Added command line to toggle monitor window
+* +Ticket 2+: It would be nice to see the notes field in the tracking window.
+** Done, You can change location column to notes by right clicking on the location header button. 
 ----
 
 ==V5.4.0.10-Release==

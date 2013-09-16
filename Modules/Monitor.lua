@@ -48,7 +48,7 @@ function GetSTData()
 	--for i=1,math.min(#compList,6) do
 	for i=1,#compList do
 		local itemData = compList[i]
-		local nameColor, timeColor
+		local nameColor, timeColor, notesText
 		
 		if itemData.connected then
 			nameColor = "|cff00ff00"
@@ -62,12 +62,17 @@ function GetSTData()
 			nameColor = "|cff0000ff"
 		end
 
+		if db.NotesColumn == 2 then
+			notesText = itemData.friendNote
+		else
+			notesText = itemData.location
+		end
 		--if not itemData.previous then itemData.previous = 0 end
 		
 		tinsert(rowData, {
 			cols = {
 				{ value = nameColor..itemData.name.."|r" },
-				{ value = itemData.location	},
+				{ value = notesText	},
 				{ value = TSMCT.GetFormattedTime(itemData.previous, "period")},
 				{ value = timeColor..TSMCT.GetFormattedTime(itemData.modified, "ago").."|r"},
 			},
@@ -90,14 +95,31 @@ function Monitor:CreateWindowWidget()
 	if viewerST then 
 		viewerST:Hide() 
 	else
+		local function GetNotesColumnText()
+			if db.NotesColumn == 2 then
+				return L["MHeadNotes"]
+			else
+				return L["MHeadLocation"]
+			end
+		end
+
 		local stCols = {
 			{name = L["MHeadName"], width = 0.25,},
-			{name = L["MHeadLocation"],	width = 0.25,},
+			{name = GetNotesColumnText(),	width = 0.25,},
 			{name = L["MHeadBefore"],width = 0.25,},
 			{name = L["MHeadNow"],width = 0.25,},
 		}
 		
-		local handlers = {}
+		local handlers = {
+			OnColumnClick = function(self, button)
+				if self.colNum == 2 and button == "RightButton" then
+					db.NotesColumn = db.NotesColumn + 1
+					db.NotesColumn = db.NotesColumn > 2 and 1 or db.NotesColumn
+					self:SetText(GetNotesColumnText())
+					viewerST:SetData(GetSTData())
+				end
+			end,
+		}
 		
 		viewerST = TSMAPI:CreateScrollingTable(parentFrame, stCols, handlers)
 		viewerST:EnableSorting(false)
