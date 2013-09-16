@@ -68,6 +68,10 @@ function TSMCT.RegisterModule()
 		},
 	}
 	
+	TSMCT.slashCommands = {
+		{ key = "ctwindow", label = L["SlashCommandHelp"], callback = "ToggleMonitorWindow" },
+	}
+
 	TSMAPI:NewModule(TSMCT)
 end
 
@@ -139,6 +143,10 @@ function TSMCT.MonitoringEnable(enable)
 	else
 		TSMCT:DisableModule("Monitor")
 	end
+end
+
+function TSMCT:ToggleMonitorWindow()
+	TSMCT.MonitoringEnable(not TSMCT.db.profile.MonitorModuleEnabled)
 end
 
 function TSMCT:Chat(...)

@@ -22,7 +22,8 @@ If you do not want to synchronize/track everyone on your friendlist:
 
 ===== Command Line =====
 * /TSM help
-* /TSM ctrack - Enables/ Disables the competitor tracker module.
+* /TSM ctrack - Opens the TSM window to the 'Competitor Tracker' page
+* /TSm ctwindow - Toggle Competitor Monitor module/window
 
 
 

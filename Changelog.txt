@@ -1,5 +1,6 @@
-==V5.4.0.11-Release==
-* Fixed: Accidentally an older version of the CTMWindow file has been included in the package. Sorry about that.
+==V5.4.0.12-Beta==
+*  Ticket 3: Add command line to +toggle monitor window+
+----
 
 ==V5.4.0.10-Release==
 * Updated TOC for patch 5.4. 
@@ -7,10 +8,3 @@
 ** Closing now also update the module enable/disable settings.
 ** Improved position saving methode.
 ** Minor cosmetic changes: sizer, minimal-height
-
-----
-
-==V5.3.0.9-Release==
-* Adaptation to changes in TSM V2.1
-** Removed the CompetitorTracker own/local --Chat Window-- Settings, because TSM V2.1 Added option for changing the chat tab which TSM and its modules use for printing messages. 
-** Removed ScrollingTable number of rows settings, because TSM V2.1 does not currently support this feature.

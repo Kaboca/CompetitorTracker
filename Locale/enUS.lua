@@ -14,7 +14,7 @@ if not L then return end
 --@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="tracker")@
 --@do-not-package@
 L["TSMModuleIconText"] = "Competitor Tracker"
-L["SlashCommandHelp"] = "Enables/Disables the Competitor Tracker module"
+L["SlashCommandHelp"] = "Toggle Competitor Monitor module/window"
 L["VersionText"] = "Version:%s"
 --@end-do-not-package@
 
