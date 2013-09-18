@@ -1,6 +1,7 @@
-== WARNING: This is not an official TradeSkillMaster module==
+<<color red>><<size 200%>> WARNING: This is not an official TradeSkillMaster module<</size>><</color>>
 
-== TradeSkillMaster_CompetitorTracker for TSM V2.0==
+==TradeSkillMaster_CompetitorTracker module for TSM v2.x==
+
 This is a module for [[http://www.curse.com/addons/wow/tradeskill-master|TradeSkillMaster]] that reports when WoW Auction House Competitors are online/offline and also saves this data for all characters on the same realm and faction.
 
 If enabled the sync feature and then you add or remove someone from your friends list and relog to an alt, 
@@ -13,21 +14,26 @@ If you do not want to synchronize/track everyone on your friendlist:
 * then you can tag (mark)  every competitor in your friend list friend note with the text in the **Track Mark** field,
  so the addon will only track the tagged/marked persons. I use it to track my auction house competition, while playing on alts.
 
+----
 
-==== How to get it to work ====
+===Competitor Monitor===
+*  You can change the location column to friendlist notes by right clicking on the Location header button. (++V5.4.0.12++)
+
+----
+
+== How to get it to work ==
 * Because this is a TradeSkillMaster module, you need to install TradeSkillMaster main module from here 
 (http://www.curse.com/addons/wow/tradeskill-master). 
 * Enable the competitor tracker module in the options.
 * To access the options simply type "/tsm" and then click on the Competitor Tracker icon in the top right.
 
-===== Command Line =====
+==== Command Line ====
 * /TSM help
 * /TSM ctrack - Opens the TSM window to the 'Competitor Tracker' page
-* /TSm ctwindow - Toggle Competitor Monitor module/window
+* /TSM ctwindow - Toggles Competitor Monitor module/window (++V5.4.0.12++)
 
 
-
-==== Where to get it ====
+=== Where to get it ===
 *[[https://github.com/Kaboca/CompetitorTracker| GITHUB]] - Alpha Quality
 * Curse - Beta, Release
 
@@ -41,7 +47,7 @@ If you do not want to synchronize/track everyone on your friendlist:
 Read the [[http://www.wowace.com/addons/arl/pages/feedback-and-bug-reporting/| Bug Reporting and Feature Requesting]] information before submitted a bug report or feature request. 
 Posting reports in the comments is not the place to do so.
 
-=== Acknowledgments ===
+== Acknowledgments ==
 *  It is heavily inspired by [[http://www.curse.com/users/Verna|Verna’s]]  [[http://www.curse.com/addons/wow/friendtracker|FriendTracker]]  (the addon no longer updated). 
 
 Ideas for the mod came from  

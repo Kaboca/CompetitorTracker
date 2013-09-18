@@ -1,7 +1,8 @@
 ==V5.4.0.12-Beta==
-* +Ticket 3+: Added command line to toggle monitor window
-* +Ticket 2+: It would be nice to see the notes field in the tracking window.
-** Done, You can change location column to notes by right clicking on the location header button. 
+* ++Ticket 3++: Added command line to toggle monitor window
+** /TSM ctwindow (You can see the avaliable commad line options by /TSM help ) 
+* ++Ticket 2++: It would be nice to see the notes field in the tracking window.
+** Done, You can change location column to friendlist notes by right clicking on the Competitor Monitor->Location header button. 
 ----
 
 ==V5.4.0.10-Release==
