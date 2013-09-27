@@ -1,4 +1,4 @@
-==V5.4.0.12-Beta==
+==Release-13==
 * ++Ticket 3++: Added command line to toggle monitor window
 ** /TSM ctwindow (You can see the avaliable commad line options by /TSM help ) 
 * ++Ticket 2++: It would be nice to see the notes field in the tracking window.
