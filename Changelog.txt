@@ -1,13 +1,10 @@
+==Release-14==
+* The missing ++AceTimer-3.0++ library now included, and dependencies updated.
+** Because this lib removed :-( from the main TSM module when the new AccurateTime lib introduced.
+
 ==Release-13==
 * ++Ticket 3++: Added command line to toggle monitor window
 ** /TSM ctwindow (You can see the avaliable commad line options by /TSM help ) 
 * ++Ticket 2++: It would be nice to see the notes field in the tracking window.
 ** Done, You can change location column to friendlist notes by right clicking on the Competitor Monitor->Location header button. 
-----
 
-==V5.4.0.10-Release==
-* Updated TOC for patch 5.4. 
-* Monitor Window
-** Closing now also update the module enable/disable settings.
-** Improved position saving methode.
-** Minor cosmetic changes: sizer, minimal-height
