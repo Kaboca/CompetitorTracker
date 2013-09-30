@@ -23,8 +23,6 @@ function Data:OnDisable()
 	if Data.UpdateHandle then
 		Data:UnregisterBucket(Data.UpdateHandle)
 	end
-
-	TSMCT:Chat(2,L["DataDisabled"])
 end
 
 function Data.Update()

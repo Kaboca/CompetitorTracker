@@ -32,8 +32,6 @@ function Monitor:OnDisable()
 	if Monitor.Window then
 		Monitor.Window:Hide()
 	end
-
-	TSMCT:Chat(2,L["MonitorDisabled"])
 end
 
 function GetSTData()

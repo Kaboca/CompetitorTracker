@@ -1,3 +1,6 @@
+==Beta-15==
+* Fix: Ticket 6 (and mybe Ticket 4 :-) )- error when using /console reloadui 
+
 ==Release-14==
 * The missing ++AceTimer-3.0++ library now included, and dependencies updated.
 ** Because this lib removed :-( from the main TSM module when the new AccurateTime lib introduced.

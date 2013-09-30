@@ -94,10 +94,10 @@ function TSMCT:OnEnable()
 end
 
 function TSMCT:OnDisable()
+	TSMCT.db.factionrealm.logoutTime = time()
+
 	TSMCT:DisableModule("Monitor")
 	TSMCT:DisableModule("Data")
-	
-	TSMCT.db.factionrealm.logoutTime = time()
 end
 
 function TSMCT:PLAYER_LOGOUT()
@@ -133,6 +133,7 @@ function TSMCT.TrackingEnable(enable)
 		TSMCT:EnableModule("Data")
 	else
 		TSMCT:DisableModule("Data")
+		TSMCT:Chat(2,L["DataDisabled"])
 	end
 end
 
@@ -143,6 +144,7 @@ function TSMCT.MonitoringEnable(enable)
 		TSMCT:EnableModule("Monitor")
 	else
 		TSMCT:DisableModule("Monitor")
+		TSMCT:Chat(2,L["MonitorDisabled"])
 	end
 end
 
