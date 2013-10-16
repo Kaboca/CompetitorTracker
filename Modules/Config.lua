@@ -33,9 +33,29 @@ end
 
 function Private.UpdateTree()
 	wipe(CompetitorsTree[2].children)
-
+	
+	local ts = {}
 	for k, v in pairs(dataDB.competitors) do
+		if v.goblin then
+			if not ts[v.goblin] then
+				ts[v.goblin] = {}
+			end
+			local treeItem = {value=k, text=k}
+			tinsert(ts[v.goblin],treeItem)
+		else
+			if not ts[k] then
+				ts[k] = {}
+			end
+		end
+    end
+
+	for k, v in pairs(ts) do
 		local treeItem = {value=k, text=k}
+		
+		if #v>0 then
+			treeItem.children = v
+		end
+		
 		tinsert(CompetitorsTree[2].children,treeItem)
     end
 	
@@ -59,7 +79,11 @@ function Private.SelectTree(treeFrame, _, selection)
 			content:AddChild(Private.CreateGeneralTabGroup(content))
 		end
 	else
-		content:AddChild(Private.CreateCompetitorTabGroup(content, selectedChild))
+		if selectedSubChild then
+			content:AddChild(Private.CreateCompetitorTabGroup(content, selectedSubChild))
+		else
+			content:AddChild(Private.CreateCompetitorTabGroup(content, selectedChild))
+		end
 	end
 end
 

@@ -38,7 +38,13 @@ function GetSTData()
 	local compList, rowData = {}, {}
 	
 	for _, v in pairs(TSMCT.db.factionrealm.competitors) do
-        table.insert(compList, v)
+		if v.goblin then
+			if v.connected then
+				table.insert(compList, v)
+			end
+		else
+			table.insert(compList, v)
+		end
     end
 	
 	table.sort(compList, function (a, b) return a.modified > b.modified; end)
@@ -46,7 +52,13 @@ function GetSTData()
 	--for i=1,math.min(#compList,6) do
 	for i=1,#compList do
 		local itemData = compList[i]
-		local nameColor, timeColor, notesText
+		local name, nameColor, timeColor, notesText
+		
+		if itemData.goblin then
+			name = itemData.goblin.."->"..itemData.name
+		else
+			name = itemData.name
+		end
 		
 		if itemData.connected then
 			nameColor = "|cff00ff00"
@@ -69,7 +81,7 @@ function GetSTData()
 		
 		tinsert(rowData, {
 			cols = {
-				{ value = nameColor..itemData.name.."|r" },
+				{ value = nameColor..name.."|r" },
 				{ value = notesText	},
 				{ value = TSMCT.GetFormattedTime(itemData.previous, "period")},
 				{ value = timeColor..TSMCT.GetFormattedTime(itemData.modified, "ago").."|r"},
