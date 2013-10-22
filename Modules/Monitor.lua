@@ -55,7 +55,7 @@ function GetSTData()
 		local name, nameColor, timeColor, notesText
 		
 		if itemData.goblin then
-			name = itemData.goblin.."->"..itemData.name
+			name = itemData.goblin.."<<"..itemData.name
 		else
 			name = itemData.name
 		end
@@ -114,10 +114,10 @@ function Monitor:CreateWindowWidget()
 		end
 
 		local stCols = {
-			{name = L["MHeadName"], width = 0.25,},
-			{name = GetNotesColumnText(),	width = 0.25,},
-			{name = L["MHeadBefore"],width = 0.25,},
-			{name = L["MHeadNow"],width = 0.25,},
+			{name = L["MHeadName"], width = 0.3,},
+			{name = GetNotesColumnText(),	width = 0.3,},
+			{name = L["MHeadBefore"],width = 0.2,},
+			{name = L["MHeadNow"],width = 0.2,},
 		}
 		
 		local handlers = {
