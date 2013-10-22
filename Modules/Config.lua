@@ -19,15 +19,15 @@ function Config:Load(parent)
 	dataDB = TSMCT.db.factionrealm
 	charDB = TSMCT.db.char
 	
-	local treeGroup = AceGUI:Create("TSMTreeGroup")
+	Private.treeGroup = AceGUI:Create("TSMTreeGroup")
+	local treeGroup = Private.treeGroup 
+	
 	treeGroup:SetLayout("Fill")
 	treeGroup:SetCallback("OnGroupSelected", Private.SelectTree)
 	treeGroup:SetStatusTable(configDB.treeGroupStatus)
 	
 	parent:AddChild(treeGroup)
 	Private.UpdateTree()
-	
-	treeGroup:SetTree(CompetitorsTree)
 	treeGroup:SelectByPath(1)
 end
 
@@ -60,6 +60,8 @@ function Private.UpdateTree()
     end
 	
 	sort(CompetitorsTree[2].children, function(a, b) return strlower(a.value) < strlower(b.value) end)
+
+	Private.treeGroup:SetTree(CompetitorsTree)
 end
 
 function Private.SelectTree(treeFrame, _, selection)
@@ -85,6 +87,20 @@ function Private.SelectTree(treeFrame, _, selection)
 			content:AddChild(Private.CreateCompetitorTabGroup(content, selectedChild))
 		end
 	end
+end
+
+function Private.SlectCompetitor(name, parentName)
+	if not Private.treeGroup then return end
+	
+	local path = "2\001"
+	
+	if parentName then
+		path = path..parentName.."\001"..name
+	else
+		path = path..name
+	end
+	
+	Private.treeGroup:SelectByPath(path)
 end
 
 function Private.CreateOptionsTabGroup(content)
@@ -465,15 +481,14 @@ function Private.CreateDeletedCompTab(content, refreshPage)
 end
 
 function Private.CreateCompetitorTabGroup(content,selectedChild)
-	local groupTabs = {}
-
-	groupTabs[1] = {value=1, text="History"}
-
 	local TabbedGroup = AceGUI:Create("TSMTabGroup")
 	TabbedGroup:SetLayout("Fill")
 	TabbedGroup:SetFullWidth(true)
 	TabbedGroup:SetFullHeight(true)
-	TabbedGroup:SetTabs(groupTabs)
+	TabbedGroup:SetTabs({
+		{value=1, text=L["HistoryTabText"]},
+		{value=2, text=L["ManagementTabText"]},
+	})
 	TabbedGroup:SetCallback("OnGroupSelected",function(self,Crap,value)
 		if viewerST then viewerST:Hide() end
 		TabbedGroup:ReleaseChildren()
@@ -481,6 +496,8 @@ function Private.CreateCompetitorTabGroup(content,selectedChild)
 
 		if value==1 then
 			Private.PersonHistory(TabbedGroup,selectedChild)
+		elseif value==2 then
+			Private.PersonManagement(TabbedGroup,selectedChild)
 		end
 	end)
 	TabbedGroup:SelectTab(1)
@@ -605,3 +622,84 @@ function Private.PersonHistory(container,name)
 	viewerST:SetData(GetHistoryData(competitor))
 end
 
+function Private.PersonManagement(container,name)
+	local competitor = dataDB.competitors[name]
+	if not competitor then return end
+	
+	local disableRemove = type(competitor.goblin) ~= "string"
+	local disableDropdown = false
+	local goblinList = {}
+	
+	for _, v in pairs(dataDB.competitors) do
+		if v.goblin then
+			if v.goblin==name or v.name==name then
+				disableDropdown = true
+			end
+		else
+			if v.name~=name then
+				goblinList[v.name] = v.name
+			end
+		end
+    end
+	
+	local page = {
+		{
+			type = "ScrollFrame",
+			layout = "Flow",
+			children = {
+				{
+					type = "InlineGroup",
+					layout = "flow",
+					title = L["MHSTitle"],
+					children = {
+						{
+							type = "Button",
+							text = L["MHClearBtnText"],
+							relativeWidth = 0.5,
+							callback = function(_,_,value)
+								wipe(competitor.records)
+								Private.SlectCompetitor(name)
+							end,
+							tooltip = L["MHClearBtnInfo"],
+						},
+					},
+				},
+				{
+					type = "InlineGroup",
+					layout = "flow",
+					title = L["MGSTitle"],
+					children = {
+						{
+							type = "Dropdown",
+							label = L["MGDropdownLabel"],
+							list = goblinList,
+							disabled = disableDropdown,
+							relativeWidth = 0.5,
+							settingInfo = {competitor, "goblin"},
+							multiselect = false,
+							callback = function(self, _, value)
+								Private.UpdateTree()
+								Private.SlectCompetitor(name,value)
+							end,
+							tooltip = L["MGDropdownInfo"],
+						},
+						{
+							type = "Button",
+							text = L["MGRemoveBtnText"],
+							disabled = disableRemove,
+							relativeWidth = 0.5,
+							callback = function(_,_,value)
+								competitor.goblin = nil
+								Private.UpdateTree()
+								Private.SlectCompetitor(name)
+							end,
+							tooltip = L["MGRemoveBtnInfo"],
+						},
+					},
+				},
+			},
+		},
+	}
+	
+	TSMAPI:BuildPage(container, page)
+end

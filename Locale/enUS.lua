@@ -133,6 +133,8 @@ L["DeletedInfo"] = "Here you can remove competitor from the deleted list. Theref
 -- Viwer Section --
 --@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="viwer")@
 --@do-not-package@
+L["HistoryTabText"]="History"
+
 L["VHeadTime"] = "Time"
 L["VHeadPeriode"] = "Periode" 
 L["VHeadLocation"] = "Location"
@@ -145,3 +147,20 @@ L["CStatus"] = "Last status"
 L["CNote"] = "Note"
 --@end-do-not-package@
 
+-- Management Section --
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="management")@
+--@do-not-package@
+L["ManagementTabText"]="Management"
+
+L["MHSTitle"]="History Settings"
+L["MHClearBtnText"]="Clear History"
+L["MHClearBtnInfo"]="Click this button to clear the competitor history."
+
+L["MGSTitle"]="Goblin Settings"
+L["MGDropdownLabel"]="Goblin:"
+L["MGDropdownInfo"]="This competitor/character will be the goblin character who list the items in the AH."
+
+L["MGRemoveBtnText"]="Remove Goblin Selection"
+L["MGRemoveBtnInfo"]="Click this button to remove/clear goblin selection for this competitor."
+
+--@end-do-not-package@
