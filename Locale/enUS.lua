@@ -157,8 +157,8 @@ L["MHClearBtnText"]="Clear History"
 L["MHClearBtnInfo"]="Click this button to clear the competitor history."
 
 L["MGSTitle"]="Goblin Settings"
-L["MGDropdownLabel"]="Goblin:"
-L["MGDropdownInfo"]="This competitor/character will be the goblin character who list the items in the AH."
+L["MGDropdownLabel"]="Goblin"
+L["MGDropdownInfo"]="This competitor/character will be the goblin character who list the items in the Auction House. Everyone knows that the goblins are the ultimate Auction House Traders. "
 
 L["MGRemoveBtnText"]="Remove Goblin Selection"
 L["MGRemoveBtnInfo"]="Click this button to remove/clear goblin selection for this competitor."

@@ -1,13 +1,9 @@
-==Beta-15==
-* Fix: Ticket 6 (and mybe Ticket 4 :-) )- error when using /console reloadui 
+== 16 ==
+* ++New++ Clear Competitor History
+* ++New++ Goblins can be referenced at the ALT`s.  When you configure a competitor, you can specify that who is the goblin.
 
-==Release-14==
-* The missing ++AceTimer-3.0++ library now included, and dependencies updated.
-** Because this lib removed :-( from the main TSM module when the new AccurateTime lib introduced.
 
-==Release-13==
-* ++Ticket 3++: Added command line to toggle monitor window
-** /TSM ctwindow (You can see the avaliable commad line options by /TSM help ) 
-* ++Ticket 2++: It would be nice to see the notes field in the tracking window.
-** Done, You can change location column to friendlist notes by right clicking on the Competitor Monitor->Location header button. 
-
+== 12->15 ==
+* Fix: AceTimer-3.0 library now included.
+* Added command line to toggle monitor window
+* Added notes field to the tracking window. (right clicking on the Location header button.) 
