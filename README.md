@@ -14,10 +14,13 @@ If you do not want to synchronize/track everyone on your friendlist:
 * then you can tag (mark)  every competitor in your friend list friend note with the text in the **Track Mark** field,
  so the addon will only track the tagged/marked persons. I use it to track my auction house competition, while playing on alts.
 
-----
-
 ===Competitor Monitor===
 *  You can change the location column to friendlist notes by right clicking on the Location header button. (++V5.4.0.12++)
+
+
+===New features starting with the (version 16)===
+Everyone knows that the goblins are the ultimate Auction House Traders.  If a tracked competitor has more ALT in the list, now You can select one of them  who list the items in the Auction House and will be the goblin charter in the list. The selection can be made on the new Management tab - You select a competitor by clicking on the given competitor name in Competitor Tracker tree.
+[[http://wow.curseforge.com/addons/competitortracker/images/8-management/|See the picture: Management]]
 
 ----
 
