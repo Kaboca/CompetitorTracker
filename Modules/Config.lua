@@ -226,6 +226,18 @@ function Private.OptionsMain(parent)
 							callback = function(_,_,value) configDB.ChatLevel = value end,
 							tooltip = L["OptChatLevelInfo"],
 						},
+						
+						{
+							type = "Slider",
+							value = configDB.MaxConnectedTime,
+							label = L["OptMaxConnectedTimeLabel"],
+							relativeWidth = 0.5,
+							min = 0,
+							max = 48,
+							step = 1,
+							callback = function(_,_,value) configDB.MaxConnectedTime = value end,
+							tooltip = L["OptMaxConnectedTimeInfo"],
+						},
 
 					},
 				},

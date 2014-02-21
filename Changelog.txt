@@ -1,9 +1,10 @@
-== 16 ==
+== 18 Beta ==
+* ++New++ Slash command to reset the monitor window position.: /TSM ctwindow reset
+** Ticket-8: Lost window. 
+* ++New++ Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. Zero value means: endless 
+** Ticket-9: Option to reset "connected"
+
+
+== 17 ==
 * ++New++ Clear Competitor History
 * ++New++ Goblins can be referenced at the ALT`s.  When you configure a competitor, you can specify that who is the goblin.
-
-
-== 12->15 ==
-* Fix: AceTimer-3.0 library now included.
-* Added command line to toggle monitor window
-* Added notes field to the tracking window. (right clicking on the Location header button.) 

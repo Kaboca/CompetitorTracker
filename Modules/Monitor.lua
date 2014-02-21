@@ -49,7 +49,6 @@ function GetSTData()
 	
 	table.sort(compList, function (a, b) return a.modified > b.modified; end)
 	
-	--for i=1,math.min(#compList,6) do
 	for i=1,#compList do
 		local itemData = compList[i]
 		local name, nameColor, timeColor, notesText
@@ -77,7 +76,6 @@ function GetSTData()
 		else
 			notesText = itemData.location
 		end
-		--if not itemData.previous then itemData.previous = 0 end
 		
 		tinsert(rowData, {
 			cols = {

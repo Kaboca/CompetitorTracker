@@ -14,8 +14,9 @@ if not L then return end
 --@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="tracker")@
 --@do-not-package@
 L["TSMModuleIconText"] = "Competitor Tracker"
-L["SlashCommandHelp"] = "Toggle Competitor Monitor module/window"
+L["SlashCommandHelp"] = "Toggles Competitor Monitor module/window or Reset the window position: /TSM ctwindow reset"
 L["VersionText"] = "Version:%s"
+L["CTWindowReset"] = "Reset MonitorWindow position."
 --@end-do-not-package@
 
 
@@ -52,6 +53,7 @@ L["DataWillBeDeleted"] = "[%s] competitor data will be deleted after [%s] when t
 L["DataDelete"] = "[%s] competitor data deleted and added to the deleted competitors list."
 L["DataRemoveFromDeleted"] = "[%s] competitor removed from the deleted competitors list, because manually added to the friends list."
 L["DataRemovedRecord"] = "Removed record:%s, %s"
+L["DataResetToOffline"] = "Competitor:%s has exceeded the configured maximum online time, therefore the current status will be offline for a while."
 --@end-do-not-package@
 
 
@@ -95,6 +97,9 @@ L["OptDefaultChatInfo"] = "Allows selection of which chat window to display mess
 
 L["OptChatLevelLabel"] = "Verbosity"
 L["OptChatLevelInfo"] = "Only the lower level messages will be printed"
+
+L["OptMaxConnectedTimeLabel"] = "Max Online Time (in hours)"
+L["OptMaxConnectedTimeInfo"]  = "Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. Zero value means: endless "
 --@end-do-not-package@
 
 

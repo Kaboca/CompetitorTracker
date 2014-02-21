@@ -38,12 +38,13 @@ local savedDBDefaults = {
 		MonitorModuleEnabled = false,
 		
 		TrackMarked = false,
-		TrackMark = "[auc]",
+		TrackMark = "%[auc%]",
 		TrackMaxRecord = 20,
 		TrackNumRows = 26,
 		SyncCompetitors = false,
 		ChatFrame = "ChatFrame1",
 		ChatLevel = 5,
+		MaxConnectedTime = 0,
 	},
 }
 
@@ -148,8 +149,15 @@ function TSMCT.MonitoringEnable(enable)
 	end
 end
 
-function TSMCT:ToggleMonitorWindow()
-	TSMCT.MonitoringEnable(not TSMCT.db.profile.MonitorModuleEnabled)
+function TSMCT:ToggleMonitorWindow(args)
+	if args and strmatch(args,"reset") then
+		TSMCT:Chat(2,L["CTWindowReset"])
+		TSMCT.MonitoringEnable(false)
+		TSMCT.db.char.Monitor.status.top=nill
+		TSMCT.MonitoringEnable(true)
+	else
+		TSMCT.MonitoringEnable(not TSMCT.db.profile.MonitorModuleEnabled)
+	end
 end
 
 function TSMCT:Chat(...)

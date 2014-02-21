@@ -44,7 +44,7 @@ function Data.Update()
 	TSMCT:Chat(4,L["DataFriendCount"],count)
 	TSMAPI:CancelFrame("CompTrackerDataUpdate")
 	
-	if TSMCT.db.profile.SyncCompetitors then
+	if configDB.SyncCompetitors then
 		for name,v in pairs(friendList) do
 			if deletedCompetitors[name] then
 				TSMCT:Chat(3,L["DataRemove"], name)
@@ -95,6 +95,15 @@ function Data:BucketEventHandler()
 				competitor.RemoveTime = nil
 				competitor.RecentlyAddedByTheTracker = nil
 				
+				if competitor.connected and connected and configDB.MaxConnectedTime > 0 then
+					local ago = time() - competitor.modified
+					if ago > configDB.MaxConnectedTime * 3600 then
+						connected = false
+						TSMCT:Chat(3,L["DataResetToOffline"],competitor.name)
+						TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)
+					end
+				end
+				
 				if competitor.connected ~= connected then
 					competitor.previous=time()-competitor.modified
 					local record = {}
@@ -120,8 +129,11 @@ function Data:BucketEventHandler()
 					end
 				end
 			else
-				if not configDB.TrackMarked or 
-					( configDB.TrackMarked and friendNote and configDB.TrackMark and string.find(friendNote,configDB.TrackMark) ) then
+				if not configDB.TrackMarked or (
+					configDB.TrackMarked and
+					friendNote and configDB.TrackMark and
+					string.len(friendNote:trim())>0 and
+					string.find(friendNote,configDB.TrackMark) ) then
 					
 					if deletedCompetitors[name] then
 						deletedCompetitors[name] = nil
