@@ -77,7 +77,7 @@ L["OptTrackMakedLabel"] = "Track only with mark"
 L["OptTrackMakedInfo"] = "Track competitor only if marked in the friend note field."
 
 L["OptTrackMakLabel"] = "Track Mark"
-L["OptTrackMakInfo"] = "Track competitor only if marked with this in the friend note field."
+L["OptTrackMakInfo"] = "Track competitor only if marked with this in the friend note field. Warning: square brackets are only allowed in the string if you escape them with %, like this %[auc%] - This %[auc%] is the string what will be find [auc] in your friend list friend note."
 L["OptTrackMakDisabledInfo"] = "First, enable the track only with mark checkbox!"
 
 L["OptSyncLabel"] ="Syncronize Competitors"

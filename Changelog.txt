@@ -1,8 +1,12 @@
+== 19 ==
+* Release - Almost nothing has changed since the 18 Beta version :-)
+
 == 18 Beta ==
 * ++New++ Slash command to reset the monitor window position.: /TSM ctwindow reset
 ** Ticket-8: Lost window. 
 * ++New++ Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. Zero value means: endless 
 ** Ticket-9: Option to reset "connected"
+
 
 
 == 17 ==
