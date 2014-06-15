@@ -24,7 +24,8 @@ If you do not want to synchronize/track everyone on your friendlist:
 * Config  
 ** Everyone knows that the goblins are the ultimate Auction House Traders.  If a tracked competitor has more ALT in the list, now You can select one of them  who list the items in the Auction House and will be the goblin charter in the list. The selection can be made on the new Management tab - You can select a competitor by clicking on the given competitor name in Competitor Tracker tree.
 [[http://wow.curseforge.com/addons/competitortracker/images/8-management/|See the picture: Management]]
-** Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. 
+** Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset.
+** Scalable Monitor Window 
 ----
 
 == How to get it to work ==

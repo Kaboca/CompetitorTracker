@@ -7,7 +7,7 @@ local AceGUI = LibStub("AceGUI-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local viewerST
 
-local configDB, dataDB, charDB
+local dbProfile, dbData, dbChar
 
 local CompetitorsTree = {
 	{ value=1, text = L["TreeOptions"], },
@@ -15,16 +15,16 @@ local CompetitorsTree = {
 }
 
 function Config:Load(parent)
-	configDB  = TSMCT.db.profile
-	dataDB = TSMCT.db.factionrealm
-	charDB = TSMCT.db.char
+	dbProfile  = TSMCT.db.profile
+	dbData = TSMCT.db.factionrealm
+	dbChar = TSMCT.db.char
 	
 	Private.treeGroup = AceGUI:Create("TSMTreeGroup")
 	local treeGroup = Private.treeGroup 
 	
 	treeGroup:SetLayout("Fill")
 	treeGroup:SetCallback("OnGroupSelected", Private.SelectTree)
-	treeGroup:SetStatusTable(configDB.treeGroupStatus)
+	treeGroup:SetStatusTable(dbProfile.treeGroupStatus)
 	
 	parent:AddChild(treeGroup)
 	Private.UpdateTree()
@@ -35,7 +35,7 @@ function Private.UpdateTree()
 	wipe(CompetitorsTree[2].children)
 	
 	local ts = {}
-	for k, v in pairs(dataDB.competitors) do
+	for k, v in pairs(dbData.competitors) do
 		if v.goblin then
 			if not ts[v.goblin] then
 				ts[v.goblin] = {}
@@ -108,17 +108,22 @@ function Private.CreateOptionsTabGroup(content)
 	TabbedGroup:SetLayout("Fill")
 	TabbedGroup:SetFullWidth(true)
 	TabbedGroup:SetFullHeight(true)
+	
 	TabbedGroup:SetTabs({
 		{value=1, text=L["OptTabOptions"]},
-		{value=2, text=L["OptTabProfiles"]},
+		{value=2, text=L["OptTabMonitor"]},
+		{value=3, text=L["OptTabProfiles"]},		
 	})
+	
 	TabbedGroup:SetCallback("OnGroupSelected",function(self,Crap,value)
 		TabbedGroup:ReleaseChildren()
 		content:DoLayout()
 		if value==1 then
-			Private.OptionsMain(TabbedGroup)
+			Private.OptionsTracking(TabbedGroup)
 		elseif value==2 then
-			Private.ProfilesPage(TabbedGroup, function() TabbedGroup:SelectTab(2) end)
+			Private.OptionsMonitor(TabbedGroup)
+		elseif value==3 then
+			Private.ProfilesPage(TabbedGroup, function() TabbedGroup:SelectTab(3) end)
 		end
 	end)
 	TabbedGroup:SelectTab(1)
@@ -126,7 +131,7 @@ function Private.CreateOptionsTabGroup(content)
 	return TabbedGroup
 end
 
-function Private.OptionsMain(parent)
+function Private.OptionsTracking(parent)
 
 	local page = { 
 		{
@@ -137,108 +142,133 @@ function Private.OptionsMain(parent)
 				{
 					type="InlineGroup",
 					layout="Flow",
-					title="Options",
+					title="Tracking Options",
 					children = {
 						{
 							type = "CheckBox",
-							value = configDB.DataModuleEnabled,
 							label = L["OptDataModuleEnabledLabel"],
+							settingInfo = { dbChar.Data, "DataModuleEnabled" },
 							relativeWidth = 0.5,
 							disabled = false,
 							tooltip = L["OptDataModuleEnabledInfo"],
 							callback = function(self,_,value) 
 								TSMCT.TrackingEnable(value);
-								self.parent.children[3]:SetValue(value)
 							end,
 						},
 						{
 							type = "Slider",
-							value = configDB.TrackMaxRecord,
+							value = dbProfile.TrackMaxRecord,
 							label = L["OptTrackMaxRecordLabel"],
 							relativeWidth = 0.5,
 							min = 1,
 							max = 100,
 							step = 1,
-							callback = function(_,_,value) configDB.TrackMaxRecord = value end,
+							callback = function(_,_,value) dbProfile.TrackMaxRecord = value end,
 							tooltip = L["OptTrackMaxRecordInfo"],
 						},
-						{
-							type = "CheckBox",
-							value = configDB.MonitorModuleEnabled,
-							label = L["OptMonitorModuleEnabledLabel"],
-							fullWidth = true,
-							disabled = false,
-							tooltip = L["OptMonitorModuleEnabledInfo"],
-							callback = function(_,_,value) TSMCT.MonitoringEnable(value) end,
-						},
-
 						{
 							type = "Spacer",
 							quantity = 2,
 						},
-
 						{
 							type = "CheckBox",
-							value = configDB.TrackMarked,
+							value = dbProfile.TrackMarked,
 							label = L["OptTrackMakedLabel"],
 							relativeWidth = 0.5,
 							disabled = false,
 							tooltip = L["OptTrackMakedInfo"],
 							callback = function(_,_,value) 
-								if value == true then configDB.TrackMarked = true; else configDB.TrackMarked = false;	end
+								if value == true then dbProfile.TrackMarked = true; else dbProfile.TrackMarked = false;	end
 							end,
 						},
 						{
 							type = "EditBox",
-							value = configDB.TrackMark,
+							value = dbProfile.TrackMark,
 							label = L["OptTrackMakLabel"],
 							relativeWidth = 0.5,
 							disabled = false,
 							disabledTooltip = L["OptTrackMakDisabledInfo"],
-							callback = function(self, _, value) configDB.TrackMark = value end,
+							callback = function(self, _, value) dbProfile.TrackMark = value end,
 							tooltip = L["OptTrackMakInfo"],
 						},
 						
 						{
 							type = "CheckBox",
-							value = configDB.SyncCompetitors,
+							value = dbProfile.SyncCompetitors,
 							label = L["OptSyncLabel"],
 							disabled = false,
 							tooltip = L["OptSyncInfo"],
 							callback = function(_,_,value) 
-								if value == true then configDB.SyncCompetitors = true; else configDB.SyncCompetitors = false;	end
+								if value == true then dbProfile.SyncCompetitors = true; else dbProfile.SyncCompetitors = false;	end
 							end,
 						},
-
 						{
 							type = "Spacer",
 							quantity = 2,
 						},
-
 						{
 							type = "Slider",
-							value = configDB.ChatLevel,
+							value = dbProfile.ChatLevel,
 							label = L["OptChatLevelLabel"],
 							relativeWidth = 0.5,
 							min = 1,
 							max = 5,
 							step = 1,
-							callback = function(_,_,value) configDB.ChatLevel = value end,
+							callback = function(_,_,value) dbProfile.ChatLevel = value end,
 							tooltip = L["OptChatLevelInfo"],
 						},
-						
+					},
+				},
+			},
+		},
+	}
+	
+	TSMAPI:BuildPage(parent, page)
+end
+
+function Private.OptionsMonitor(parent)
+	local page = { 
+		{
+			type = "SimpleGroup",
+			layout = "list",
+	
+			children = {
+				{
+					type="InlineGroup",
+					layout="Flow",
+					title="Monitor Options",
+					children = {
+						{
+							type = "CheckBox",
+							label = L["OptMonitorModuleEnabledLabel"],
+							settingInfo = { dbChar.Monitor, "MonitorModuleEnabled" },
+							fullWidth = true,
+							disabled = false,
+							tooltip = L["OptMonitorModuleEnabledInfo"],
+							callback = function(_,_,value) TSMCT.MonitoringEnable(value) end,
+						},
 						{
 							type = "Slider",
-							value = configDB.MaxConnectedTime,
+							label = L["OptMonitorFrameScaleLabel"],
+							settingInfo = { dbChar.Monitor, "FrameScale" },
+							isPercent = true,
+							relativeWidth = 0.5,
+							min = 0.1,
+							max = 2,
+							step = 0.05,
+							callback = function(_, _, value) if CTMWindow1 then CTMWindow1:SetScale(value) end end,
+							tooltip = L["OptMonitorFrameScaleInfo"],
+						},
+						{
+							type = "Slider",
 							label = L["OptMaxConnectedTimeLabel"],
+							settingInfo = { dbProfile, "MaxConnectedTime" },
 							relativeWidth = 0.5,
 							min = 0,
 							max = 48,
 							step = 1,
-							callback = function(_,_,value) configDB.MaxConnectedTime = value end,
 							tooltip = L["OptMaxConnectedTimeInfo"],
 						},
-
 					},
 				},
 			},
@@ -301,13 +331,13 @@ function Private.ProfilesPage(parent,refreshPage)
 					children = {
 						{
 							type = "Label",
-							text = L["ProfileIntro"] .. "\n" .. "\n",
-							fullWidth = true,
+							text = L["ProfileIntro"] .. "\n\n",
+							relativeWidth = 1,
 						},
 						{
 							type = "Label",
 							text = L["ProfileResetDesc"],
-							fullWidth = true,
+							relativeWidth = 1,
 						},
 						{	--simplegroup1 for the reset button / current profile text
 							type = "SimpleGroup",
@@ -335,7 +365,7 @@ function Private.ProfilesPage(parent,refreshPage)
 						{
 							type = "Label",
 							text = L["ProfileChooseDesc"],
-							fullWidth = true,
+							relativeWidth = 1,
 						},
 						{	--simplegroup2 for the new editbox / existing profiles dropdown
 							type = "SimpleGroup",
@@ -372,7 +402,7 @@ function Private.ProfilesPage(parent,refreshPage)
 						{
 							type = "Label",
 							text = L["ProfileCopyDesc"],
-							fullWidth = true,
+							relativeWidth = 1,
 						},
 						{
 							type = "Dropdown",
@@ -394,7 +424,7 @@ function Private.ProfilesPage(parent,refreshPage)
 						{
 							type = "Label",
 							text = L["ProfileDeleteDesc"],
-							fullWidth = true,
+							relativeWidth = 1,
 						},
 						{
 							type = "Dropdown",
@@ -445,8 +475,8 @@ function Private.CreateGeneralTabGroup(content)
 end
 
 local function RemoveDeletedCompetitorFromList(TabbedGroup, competitor, refreshPage)
-	if competitor and dataDB.deleted[competitor] then
-		dataDB.deleted[competitor] = nil
+	if competitor and dbData.deleted[competitor] then
+		dbData.deleted[competitor] = nil
 		refreshPage()
 	end
 end
@@ -454,7 +484,7 @@ end
 function Private.CreateDeletedCompTab(content, refreshPage)
 	local deletedWidgets = { }
 	
-	for competitor, _ in pairs(dataDB.deleted) do
+	for competitor, _ in pairs(dbData.deleted) do
 		local widgets = { 
 			{ 	type = "Label", text = competitor, relativeWidth = 0.7,	},
 			{ 	type = "Button", text = "Remove", relativeWidth = 0.3,
@@ -557,7 +587,7 @@ function GetHistoryData(competitor)
 end
 
 function Private.PersonHistory(container,name)
-	local competitor = dataDB.competitors[name] 
+	local competitor = dbData.competitors[name] 
 	if not competitor then return end
 	
 	local linkColor = TSMAPI.Design:GetInlineColor("link")
@@ -635,14 +665,14 @@ function Private.PersonHistory(container,name)
 end
 
 function Private.PersonManagement(container,name)
-	local competitor = dataDB.competitors[name]
+	local competitor = dbData.competitors[name]
 	if not competitor then return end
 	
 	local disableRemove = type(competitor.goblin) ~= "string"
 	local disableDropdown = false
 	local goblinList = {}
 	
-	for _, v in pairs(dataDB.competitors) do
+	for _, v in pairs(dbData.competitors) do
 		if v.goblin then
 			if v.goblin==name or v.name==name then
 				disableDropdown = true

@@ -100,6 +100,10 @@ L["OptChatLevelInfo"] = "Only the lower level messages will be printed"
 
 L["OptMaxConnectedTimeLabel"] = "Max Online Time (in hours)"
 L["OptMaxConnectedTimeInfo"]  = "Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. Zero value means: endless "
+
+L["OptMonitorFrameScaleLabel"] = "Monitor Frame Scale"
+L["OptMonitorFrameScaleInfo"] = "Changes the size of the Monitor Window frame."
+
 --@end-do-not-package@
 
 

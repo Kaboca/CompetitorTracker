@@ -5,6 +5,7 @@ TSMCT:SetDefaultModuleState(false)
 
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local AceGUI = LibStub("AceGUI-3.0")
+local dbCharMonitor, dbCharData
 
 TSMCT.Version = GetAddOnMetadata(addonName, "Version")
 TSMCT.DBVersion = 1
@@ -22,21 +23,22 @@ local savedDBDefaults = {
 
 	char = {
 		["Monitor"] = {
+			MonitorModuleEnabled = false,
 			version = 0,
 			NotesColumn = 1,
 			status = {
 				width=300,
 				height=200,
 			},
+			FrameScale  = 1,
+		},
+		["Data"] = {
+			DataModuleEnabled = false,
 		},
 	},
 	
 	profile = {
 		treeGroupStatus = {treewidth = 200, groups={[2]=true}},
-		
-		DataModuleEnabled = false,
-		MonitorModuleEnabled = false,
-		
 		TrackMarked = false,
 		TrackMark = "%[auc%]",
 		TrackMaxRecord = 20,
@@ -54,6 +56,11 @@ function TSMCT:OnInitialize()
 	end
 
 	TSMCT.db = LibStub:GetLibrary("AceDB-3.0"):New(addonName.."DB", savedDBDefaults, true)
+	
+	dbCharMonitor = TSMCT.db.char.Monitor
+	dbCharData = TSMCT.db.char.Data
+	
+	
 	TSMCT.RegisterModule()
 end
 
@@ -83,10 +90,10 @@ function TSMCT:OnEnable()
 
 	TSMCT:Chat(2,L["VersionText"],TSMCT.Version)
 	
-	if TSMCT.db.profile.DataModuleEnabled then 
+	if dbCharData.DataModuleEnabled then 
 		TSMCT:EnableModule("Data")
 		
-		if TSMCT.db.profile.MonitorModuleEnabled then
+		if dbCharMonitor.MonitorModuleEnabled then
 			TSMCT:EnableModule("Monitor")
 		end
 	end
@@ -129,7 +136,7 @@ end
 function TSMCT.TrackingEnable(enable) 
 	TSMCT.MonitoringEnable(enable) 
 	
-	TSMCT.db.profile.DataModuleEnabled = enable
+	dbCharData.DataModuleEnabled = enable
 	if enable then 
 		TSMCT:EnableModule("Data")
 	else
@@ -139,7 +146,7 @@ function TSMCT.TrackingEnable(enable)
 end
 
 function TSMCT.MonitoringEnable(enable) 
-	TSMCT.db.profile.MonitorModuleEnabled = enable
+	dbCharMonitor.MonitorModuleEnabled = enable
 	
 	if enable then 
 		TSMCT:EnableModule("Monitor")
@@ -153,10 +160,10 @@ function TSMCT:ToggleMonitorWindow(args)
 	if args and strmatch(args,"reset") then
 		TSMCT:Chat(2,L["CTWindowReset"])
 		TSMCT.MonitoringEnable(false)
-		TSMCT.db.char.Monitor.status.top=nill
+		dbCharMonitor.status.top=nill
 		TSMCT.MonitoringEnable(true)
 	else
-		TSMCT.MonitoringEnable(not TSMCT.db.profile.MonitorModuleEnabled)
+		TSMCT.MonitoringEnable(not dbCharMonitor.MonitorModuleEnabled)
 	end
 end
 
