@@ -64,7 +64,8 @@ L["DataResetToOffline"] = "Competitor:%s has exceeded the configured maximum onl
 L["TreeOptions"] = "Options"
 L["TreeCompetitors"] = "Competitors"
 
-L["OptTabOptions"] = "Options"
+L["OptTabOptions"] = "Tracking"
+L["OptTabMonitor"] = "Monitor"
 L["OptTabProfiles"] = "Profiles"
 
 L["OptDataModuleEnabledLabel"] = "Track Competitors"
