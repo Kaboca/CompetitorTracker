@@ -1,3 +1,7 @@
+== 22 ==
+* Updated for patch 6.0.2
+* Added support for monitoring <Away> status.
+
 == 21 ==
 * Missing localization token optTabMonitor uploaded
 

@@ -68,6 +68,10 @@ function GetSTData()
 			nameColor = "|cffFFF569"
 		end
 
+		if itemData.status == "<Away>" then
+			timeColor = "|cffFFF569"
+		end
+		
 		if dbCharMonitor.NotesColumn == 2 then
 			notesText = itemData.friendNote
 		else
