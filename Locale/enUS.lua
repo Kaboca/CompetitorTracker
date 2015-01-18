@@ -54,12 +54,13 @@ L["DataDelete"] = "[%s] competitor data deleted and added to the deleted competi
 L["DataRemoveFromDeleted"] = "[%s] competitor removed from the deleted competitors list, because manually added to the friends list."
 L["DataRemovedRecord"] = "Removed record:%s, %s"
 L["DataResetToOffline"] = "Competitor:%s has exceeded the configured maximum online time, therefore the current status will be offline for a while."
+L["DataRefreshFriendList"] = "Triggering Friend List update..."
 --@end-do-not-package@
 
 
 
 -- << Config.lua >> --------------------------------------------------------------------------------
---@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="config")@
+--@localization(locale="enUS", format="lua_additive_table", same-key-is-true=true, namespace="config.options")@
 --@do-not-package@
 L["TreeOptions"] = "Options"
 L["TreeCompetitors"] = "Competitors"
@@ -98,6 +99,12 @@ L["OptDefaultChatInfo"] = "Allows selection of which chat window to display mess
 
 L["OptChatLevelLabel"] = "Verbosity"
 L["OptChatLevelInfo"] = "Only the lower level messages will be printed"
+
+L["OptTiggerEnabledLabel"] = "Refresh trigger"
+L["OptTriggerEnabledInfo"] = "When enabled the data module will update itself even if it was not FriendList update (Blizz bug) - Data module restart needed!(enable/disable)"
+
+L["OptTriggerDelayLabel"] = "Trigger delay"
+L["OptTriggerDelayInfo"]  = "Delay in seconds between two refresh trigger event- Data module restart needed!"
 
 L["OptMaxConnectedTimeLabel"] = "Max Online Time (in hours)"
 L["OptMaxConnectedTimeInfo"]  = "Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. Zero value means: endless "
@@ -165,6 +172,14 @@ L["ManagementTabText"]="Management"
 L["MHSTitle"]="History Settings"
 L["MHClearBtnText"]="Clear History"
 L["MHClearBtnInfo"]="Click this button to clear the competitor history."
+
+L["MHDeleteBtnInfo"] = "Click this button to DELETE the competitor from the list."
+L["MHDeleteBtnText"] = "Delete Competitor Data"
+
+L["PersonDeleteDesc"] = "Remove a tracked competitor from the list, because the competitor transferred off or deleted from the server"
+L["PersonDeleteSure"] = "Are you sure you want to delete the selected person?"
+L["PersonDeleteAccept"] = "Accept"
+L["PersonDeleteCancel"] = "Cancel"
 
 L["MGSTitle"]="Goblin Settings"
 L["MGDropdownLabel"]="Goblin"

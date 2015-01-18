@@ -1,15 +1,19 @@
-== 22 ==
+== 23 == 2015.01.18
+* Ticket-14: Not updating - This is probably one of Blizzard's bug: Some friends log on and off without triggering the "has come online" or "has gone offline" messages. (http://us.battle.net/wow/en/forum/topic/15270579399?page=2#25) I made a workaround which enforces periodic updating of the friend list - see options: triggering.
+* Ticket-12: Cannot remove competitor + New management options to Remove/Delete Competitor Data
+
+== 22 == 2014.10.15
 * Updated for patch 6.0.2
 * Added support for monitoring <Away> status.
 
-== 21 ==
+== 21 == 2014.06.15
 * Missing localization token optTabMonitor uploaded
 
 == 20 ==
 * ++New++ Scalable Monitor Window -> Changes in the config section
 * Modified offline color.
 
-== 19 ==
+== 19 == 2014.03.03
 * ++New++ Slash command to reset the monitor window position.: /TSM ctwindow reset
 ** Ticket-8: Lost window. 
 * ++New++ Set a cap on how long online status ( the 'Now' column in Competitor Monitor) can remain true before automatically being reset. Zero value means: endless 

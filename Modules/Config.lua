@@ -89,7 +89,7 @@ function Private.SelectTree(treeFrame, _, selection)
 	end
 end
 
-function Private.SlectCompetitor(name, parentName)
+function Private.SelectCompetitor(name, parentName)
 	if not Private.treeGroup then return end
 	
 	local path = "2\001"
@@ -216,6 +216,28 @@ function Private.OptionsTracking(parent)
 							step = 1,
 							callback = function(_,_,value) dbProfile.ChatLevel = value end,
 							tooltip = L["OptChatLevelInfo"],
+						},
+						{
+							type = "Spacer",
+							quantity = 2,
+						},
+						{
+							type = "CheckBox",
+							label = L["OptTiggerEnabledLabel"],
+							settingInfo = { dbProfile, "TriggerEnabled" },
+							relativeWidth = 0.5,
+							disabled = false,
+							tooltip = L["OptTriggerEnabledInfo"],
+						},
+						{
+							type = "Slider",
+							settingInfo = { dbProfile, "TriggerDelay" },
+							label = L["OptTriggerDelayLabel"],
+							relativeWidth = 0.5,
+							min = 60,
+							max = 500,
+							step = 10,
+							tooltip = L["OptTriggerDelayInfo"],
 						},
 					},
 				},
@@ -665,6 +687,18 @@ function Private.PersonHistory(container,name)
 end
 
 function Private.PersonManagement(container,name)
+	-- Popup Confirmation Window used in this module
+	StaticPopupDialogs["TSMCompetitorTrackerPerson.DeleteConfirm"] = StaticPopupDialogs["TSMCompetitorTrackerPerson.DeleteConfirm"] or {
+		text = L["PersonDeleteSure"],
+		button1 = L["PersonDeleteAccept"],
+		button2 = L["PersonDeleteCancel"],
+		timeout = 0,
+		whileDead = true,
+		hideOnEscape = true,
+		OnCancel = false,
+		-- OnAccept defined later
+	}
+
 	local competitor = dbData.competitors[name]
 	if not competitor then return end
 	
@@ -697,12 +731,34 @@ function Private.PersonManagement(container,name)
 						{
 							type = "Button",
 							text = L["MHClearBtnText"],
-							relativeWidth = 0.5,
+							relativeWidth = 1,
 							callback = function(_,_,value)
 								wipe(competitor.records)
-								Private.SlectCompetitor(name)
+								Private.SelectCompetitor(name)
 							end,
 							tooltip = L["MHClearBtnInfo"],
+						},
+						{
+							type = "Spacer",
+							quantity = 2,
+						},
+						{
+							type = "Label",
+							text = L["PersonDeleteDesc"],
+							relativeWidth = 1,
+						},
+						{
+							type = "Button",
+							text = L["MHDeleteBtnText"],
+							relativeWidth = 1,
+							callback = function(_,_,value)
+								StaticPopupDialogs["TSMCompetitorTrackerPerson.DeleteConfirm"].OnAccept = function()
+									TSMCT.Data.DeleteCompetitorData(name)
+									Private.UpdateTree()
+								end
+								TSMAPI:ShowStaticPopupDialog("TSMCompetitorTrackerPerson.DeleteConfirm")
+							end,
+							tooltip = L["MHDeleteBtnInfo"],
 						},
 					},
 				},
@@ -721,7 +777,7 @@ function Private.PersonManagement(container,name)
 							multiselect = false,
 							callback = function(self, _, value)
 								Private.UpdateTree()
-								Private.SlectCompetitor(name,value)
+								Private.SelectCompetitor(name,value)
 							end,
 							tooltip = L["MGDropdownInfo"],
 						},
@@ -733,7 +789,7 @@ function Private.PersonManagement(container,name)
 							callback = function(_,_,value)
 								competitor.goblin = nil
 								Private.UpdateTree()
-								Private.SlectCompetitor(name)
+								Private.SelectCompetitor(name)
 							end,
 							tooltip = L["MGRemoveBtnInfo"],
 						},

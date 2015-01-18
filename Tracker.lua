@@ -47,6 +47,8 @@ local savedDBDefaults = {
 		ChatFrame = "ChatFrame1",
 		ChatLevel = 5,
 		MaxConnectedTime = 0,
+		TriggerEnabled = true,
+		TriggerDelay = 120,
 	},
 }
 

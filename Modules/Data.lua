@@ -14,11 +14,14 @@ function Data:OnEnable()
 	removedInThisSession = {}
 	
 	TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)
+	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", Data.FilterSystemMsg)
 end
 
 function Data:OnDisable()
 	TSMAPI:CancelFrame("CompTrackerDataUpdate")
 	TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
+	
+	ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", Data.FilterSystemMsg)
 	
 	if Data.UpdateHandle then
 		Data:UnregisterBucket(Data.UpdateHandle)
@@ -35,12 +38,14 @@ function Data.Update()
 			friendList[name] = i
 			noteList[name] = friendNote
 			count=count+1
-		else
-			TSMCT:Chat(4,L["DataFriendListWait"])
-			ShowFriends()
-			return false
 		end
 	end
+	if count < 1 then
+		TSMCT:Chat(4,L["DataFriendListWait"])
+		ShowFriends()
+		return false
+	end
+	
 	TSMCT:Chat(4,L["DataFriendCount"],count)
 	TSMAPI:CancelFrame("CompTrackerDataUpdate")
 	
@@ -72,7 +77,19 @@ function Data.Update()
 	Data:BucketEventHandler()
 	
 	Data.UpdateHandle = Data:RegisterBucketEvent("FRIENDLIST_UPDATE", 5, "BucketEventHandler")
+
+	if configDB.TriggerEnabled then
+		TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", configDB.TriggerDelay, Data.RefreshFriendlist,configDB.TriggerDelay)
+	end
+	
 	return true
+end
+
+function Data.FilterSystemMsg(_, _, msg, ...)
+	if string.find(msg, "has gone offline") or string.find(msg, "has come online") then
+		TSMCT:Chat(5,"CHAT_MSG_DataChecking")
+		ShowFriends()
+	end
 end
 
 function Data:BucketEventHandler()
@@ -165,11 +182,14 @@ function Data:BucketEventHandler()
 			if not v.RemoveTime then
 				v.RemoveTime = time() + 120 
 				TSMCT:Chat(4,L["DataWillBeDeleted"],k, TSMCT.GetFormattedTime(v.RemoveTime, "fromnow"))
-				TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", 130, Data.RefreshFriendlist,15)	
+				if not configDB.TriggerEnabled then
+					TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", 130, Data.RefreshFriendlist,15)	
+				end
 			elseif v.RemoveTime < time() then
-				TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
+				if not configDB.TriggerEnabled then
+					TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
+				end
 				Data.DeleteCompetitorData(k)
-				deletedCompetitors[k] = true
 			end
 		end
     end
@@ -178,9 +198,11 @@ end
 function Data.DeleteCompetitorData(name)
 	wipe(competitors[name])
 	competitors[name] = nil
+	deletedCompetitors[name] = true
 	TSMCT:Chat(3,L["DataDelete"],name)
 end
 
 function Data.RefreshFriendlist()
+	TSMCT:Chat(5,L["DataRefreshFriendList"])
 	ShowFriends()
 end
