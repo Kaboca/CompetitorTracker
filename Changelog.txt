@@ -1,12 +1,18 @@
-== 23 == 2015.01.18
+== 24 == 
+* bump TOC
+
+== 23 == 
+2015.01.18
 * Ticket-14: Not updating - This is probably one of Blizzard's bug: Some friends log on and off without triggering the "has come online" or "has gone offline" messages. (http://us.battle.net/wow/en/forum/topic/15270579399?page=2#25) I made a workaround which enforces periodic updating of the friend list - see options: triggering.
 * Ticket-12: Cannot remove competitor + New management options to Remove/Delete Competitor Data
 
-== 22 == 2014.10.15
+== 22 == 
+2014.10.15
 * Updated for patch 6.0.2
 * Added support for monitoring <Away> status.
 
-== 21 == 2014.06.15
+== 21 == 
+2014.06.15
 * Missing localization token optTabMonitor uploaded
 
 == 20 ==
