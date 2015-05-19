@@ -13,13 +13,13 @@ function Data:OnEnable()
 	configDB  = TSMCT.db.profile
 	removedInThisSession = {}
 	
-	TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)
+	TSMAPI.Delay:AfterTime("CompTrackerDataUpdate", 15, Data.Update, 15)
 	ChatFrame_AddMessageEventFilter("CHAT_MSG_SYSTEM", Data.FilterSystemMsg)
 end
 
 function Data:OnDisable()
-	TSMAPI:CancelFrame("CompTrackerDataUpdate")
-	TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
+	TSMAPI.Delay:Cancel("CompTrackerDataUpdate")
+	TSMAPI.Delay:Cancel("CompTrackerRefreshFriendlist")
 	
 	ChatFrame_RemoveMessageEventFilter("CHAT_MSG_SYSTEM", Data.FilterSystemMsg)
 	
@@ -47,7 +47,7 @@ function Data.Update()
 	end
 	
 	TSMCT:Chat(4,L["DataFriendCount"],count)
-	TSMAPI:CancelFrame("CompTrackerDataUpdate")
+	TSMAPI.Delay:Cancel("CompTrackerDataUpdate")
 	
 	if configDB.SyncCompetitors then
 		for name,v in pairs(friendList) do
@@ -79,7 +79,7 @@ function Data.Update()
 	Data.UpdateHandle = Data:RegisterBucketEvent("FRIENDLIST_UPDATE", 5, "BucketEventHandler")
 
 	if configDB.TriggerEnabled then
-		TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", configDB.TriggerDelay, Data.RefreshFriendlist,configDB.TriggerDelay)
+		TSMAPI.Delay:AfterTime("CompTrackerRefreshFriendlist", configDB.TriggerDelay, Data.RefreshFriendlist,configDB.TriggerDelay)
 	end
 	
 	return true
@@ -117,7 +117,7 @@ function Data:BucketEventHandler()
 					if ago > configDB.MaxConnectedTime * 3600 then
 						connected = false
 						TSMCT:Chat(3,L["DataResetToOffline"],competitor.name)
-						TSMAPI:CreateTimeDelay("CompTrackerDataUpdate", 15, Data.Update, 15)
+						TSMAPI.Delay:AfterTime("CompTrackerDataUpdate", 15, Data.Update, 15)
 					end
 				end
 				
@@ -183,11 +183,11 @@ function Data:BucketEventHandler()
 				v.RemoveTime = time() + 120 
 				TSMCT:Chat(4,L["DataWillBeDeleted"],k, TSMCT.GetFormattedTime(v.RemoveTime, "fromnow"))
 				if not configDB.TriggerEnabled then
-					TSMAPI:CreateTimeDelay("CompTrackerRefreshFriendlist", 130, Data.RefreshFriendlist,15)	
+					TSMAPI.Delay:AfterTime("CompTrackerRefreshFriendlist", 130, Data.RefreshFriendlist,15)	
 				end
 			elseif v.RemoveTime < time() then
 				if not configDB.TriggerEnabled then
-					TSMAPI:CancelFrame("CompTrackerRefreshFriendlist")
+					TSMAPI.Delay:Cancel("CompTrackerRefreshFriendlist")
 				end
 				Data.DeleteCompetitorData(k)
 			end

@@ -19,8 +19,7 @@ Libs\AceBucket-3.0\AceBucket-3.0.xml
 Locale\enUS.lua
 
 Tracker.lua
+Modules\Options.lua
 Modules\Config.lua
 Modules\Data.lua
 Modules\Monitor.lua
-
-Widgets\CTMWindow.lua

@@ -79,6 +79,11 @@ function TSMCT.RegisterModule()
 		},
 	}
 	
+	TSMCT.moduleOptions = {
+		callback="Options:Load",
+		desc=L["TSMModuleIconText"],
+	}
+	
 	TSMCT.slashCommands = {
 		{ key = "ctwindow", label = L["SlashCommandHelp"], callback = "ToggleMonitorWindow" },
 	}

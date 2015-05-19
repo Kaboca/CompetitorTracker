@@ -4,30 +4,29 @@ local Monitor = TSMCT:NewModule("Monitor","AceHook-3.0")
 local L = LibStub("AceLocale-3.0"):GetLocale(addonName)
 local AceGUI = LibStub("AceGUI-3.0")
 
-local viewerST
-local dbCharMonitor, dbData 
+local dbCharMonitor, dbData
+local private = {
+	frame=nil, 
+}
 
 function Monitor:OnEnable()
 	TSMCT:Chat(2,L["MonitorEnabled"])
 	dbCharMonitor = TSMCT.db.char.Monitor
 	dbData = TSMCT.db.factionrealm
 	
-	Monitor:CreateWindowWidget()
-	Monitor.Window:Show()
-
-	TSMAPI:CreateTimeDelay("CompMonitorUpdate", 10, Monitor.Update, 10)
+	Monitor:Create()
+	private.frame:Show()
+	Monitor:Update()
+	
+	TSMAPI.Delay:AfterTime("CompMonitorUpdate", 10, Monitor.Update, 10)
 end
 
 function Monitor:OnDisable()
-	TSMAPI:CancelFrame("CompMonitorUpdate")
+	TSMAPI.Delay:Cancel("CompMonitorUpdate")
 	Monitor:UnhookAll()
 	
-	if viewerST then 
-		viewerST:Hide() 
-	end
-
-	if Monitor.Window then
-		Monitor.Window:Hide()
+	if private.frame then
+		private.frame:Hide()
 	end
 end
 
@@ -91,66 +90,135 @@ function GetSTData()
 	return rowData
 end
 
-function Monitor:CreateWindowWidget()
-	local monitorWindow = AceGUI:Create("CTMWindow")
-	Monitor.Window = monitorWindow
-	
-	monitorWindow:SetStatusTable(dbCharMonitor.status)
-	monitorWindow:SetTitle(L["MonitorTitle"])
-	Monitor:SecureHook(monitorWindow.frame, "Hide", Monitor.MonitorHide)
-	
-	local parentFrame = monitorWindow.content
-	
-	if viewerST then 
-		viewerST:Hide() 
-	else
-		local function GetNotesColumnText()
-			if dbCharMonitor.NotesColumn == 2 then
-				return L["MHeadNotes"]
-			else
-				return L["MHeadLocation"]
-			end
-		end
+function Monitor:Update()
+	private.frame.st:SetData(GetSTData())
+end
 
-		local stCols = {
-			{name = L["MHeadName"], width = 0.3,},
-			{name = GetNotesColumnText(),	width = 0.3,},
-			{name = L["MHeadBefore"],width = 0.2,},
-			{name = L["MHeadNow"],width = 0.2,},
-		}
-		
-		local handlers = {
-			OnColumnClick = function(self, button)
-				if self.colNum == 2 and button == "RightButton" then
-					dbCharMonitor.NotesColumn = dbCharMonitor.NotesColumn + 1
-					dbCharMonitor.NotesColumn = dbCharMonitor.NotesColumn > 2 and 1 or dbCharMonitor.NotesColumn
-					self:SetText(GetNotesColumnText())
-					viewerST:SetData(GetSTData())
-				end
-			end,
-		}
-		
-		viewerST = TSMAPI:CreateScrollingTable(parentFrame, stCols, handlers)
-		viewerST:EnableSorting(false)
-		viewerST:DisableSelection(true)
+function Monitor:Create()
+	if private.frame then return end
+
+	local function GetNotesColumnText()
+		if dbCharMonitor.NotesColumn == 2 then
+			return L["MHeadNotes"]
+		else
+			return L["MHeadLocation"]
+		end
 	end
 
-	viewerST:Show()
-	viewerST:SetParent(parentFrame)
-	viewerST:SetAllPoints()
-	viewerST:SetData(GetSTData())
+	local stHandlers = {
+		OnColumnClick = function(self, button)
+			if self.colNum == 2 and button == "RightButton" then
+				dbCharMonitor.NotesColumn = dbCharMonitor.NotesColumn + 1
+				dbCharMonitor.NotesColumn = dbCharMonitor.NotesColumn > 2 and 1 or dbCharMonitor.NotesColumn
+				self:SetText(GetNotesColumnText())
+				Monitor:Update()
+			end
+		end,
+	}
+	
+	
+	local frameDefaults = {
+		x = 100,
+		y = 300,
+		width = 450,
+		height = 400,
+		scale = 1,
+	}
+	
+	local BFC = TSMAPI.GUI:GetBuildFrameConstants()
+	
+	local frameInfo = {
+		type = "MovableFrame",
+		name = "TSMCompetitorTrackerFrame",
+		movableDefaults = frameDefaults,
+		minResize = {300, 120},
+		scripts = {"OnHide"},
+		children = {
+			{
+				type = "Text",
+				text = format("Competitor Tracker - %s", strfind(TSMCT._version, "@") and "Dev" or TSMCT._version),
+				textFont = {TSMAPI.Design:GetContentFont(), 18},
+				points = {{"TOP", 0, -3}},
+			},
+			{
+				type = "HLine",
+				offset = -24,
+			},
+			{
+				type = "VLine",
+				offset = 0,
+				size = {2, 25},
+				points = {{"TOPRIGHT", -25, -1}},
+			},
+			{
+				type = "Button",
+				key = "closeBtn",
+				text = "X",
+				textHeight = 18,
+				size = {19, 19},
+				points = {{"TOPRIGHT", -3, -3}},
+				scripts = {"OnClick"},
+			},
+			{
+				type = "ScrollingTableFrame",
+				key = "st",
+				stCols = { 
+					{name = L["MHeadName"], 		width = 0.3, headAlign="LEFT" },
+					{name = GetNotesColumnText(),	width = 0.3, headAlign="LEFT" },
+					{name = L["MHeadBefore"],		width = 0.2, headAlign="LEFT" },
+					{name = L["MHeadNow"],			width = 0.2, headAlign="LEFT" },
+				},
+				points = { { "TOPLEFT", 5, -30 }, { "BOTTOMRIGHT", -5, 5 } },
+				scripts = { "OnColumnClick" },
+			},
+			{
+				type = "IconButton",
+				key = "sizer",
+				icon = "Interface\\Addons\\TradeSkillMaster\\Media\\Sizer",
+				size = { 16, 16 },
+				points = { { "BOTTOMRIGHT", -2, 2 } },
+				scripts = { "OnMouseDown", "OnMouseUp" },
+			},
+		},
+		handlers = {
+			OnHide = function(self)
+				private.frame:Hide()
+			end,
+			closeBtn = {
+				OnClick = function(self)
+					--private.frame:Hide()
+					TSMCT.MonitoringEnable(false)
+				end,
+			},
+			st = {
+				OnColumnClick = function(self, button)
+					if self.colNum == 2 and button == "RightButton" then
+						dbCharMonitor.NotesColumn = dbCharMonitor.NotesColumn + 1
+						dbCharMonitor.NotesColumn = dbCharMonitor.NotesColumn > 2 and 1 or dbCharMonitor.NotesColumn
+						self:SetText(GetNotesColumnText())
+						Monitor:Update()
+					end
+				end,
+			},
+			sizer = {
+				OnMouseDown = function()
+					private.frame:StartSizing("BOTTOMRIGHT")
+				end,
+				OnMouseUp = function()
+					private.frame:StopMovingOrSizing()
+				end,
+			},
+		},
+	}
+
+	local frame = TSMAPI.GUI:BuildFrame(frameInfo)
+	TSMAPI.Design:SetFrameBackdropColor(frame)
+	--tinsert(UISpecialFrames, "TSMCraftingTradeSkillFrame")
+	private.frame = frame
 	
 	--Scale the monitor window according to the config option
-	if monitorWindow.frame:GetScale() ~= 1 and dbCharMonitor.FrameScale == 1 then 
-		dbCharMonitor.FrameScale = monitorWindow.frame:GetScale() 
+	if private.frame:GetScale() ~= 1 and dbCharMonitor.FrameScale == 1 then 
+		dbCharMonitor.FrameScale = private.frame:GetScale() 
 	end
-	monitorWindow.frame:SetScale(dbCharMonitor.FrameScale)
-end
-
-function Monitor:Update()
-	viewerST:SetData(GetSTData())
-end
-
-function Monitor.MonitorHide()
-	TSMCT.MonitoringEnable(false)
+	private.frame:SetScale(dbCharMonitor.FrameScale)
 end
