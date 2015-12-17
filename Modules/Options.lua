@@ -184,7 +184,7 @@ function Private.OptionsMonitor(parent)
 							min = 0.1,
 							max = 2,
 							step = 0.05,
-							callback = function(_, _, value) if TSMCompetitorTrackerFrame then TSMCompetitorTrackerFrame:SetScale(value) end end,
+							callback = function(_, _, value) if TSMCompetitorTrackerFrame then TSMCompetitorTrackerFrame:SetFrameScale(value) end end,
 							tooltip = L["OptMonitorFrameScaleInfo"],
 						},
 						{

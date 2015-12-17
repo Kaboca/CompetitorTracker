@@ -213,12 +213,22 @@ function Monitor:Create()
 
 	local frame = TSMAPI.GUI:BuildFrame(frameInfo)
 	TSMAPI.Design:SetFrameBackdropColor(frame)
-	--tinsert(UISpecialFrames, "TSMCraftingTradeSkillFrame")
 	private.frame = frame
 	
-	--Scale the monitor window according to the config option
-	if private.frame:GetScale() ~= 1 and dbCharMonitor.FrameScale == 1 then 
-		dbCharMonitor.FrameScale = private.frame:GetScale() 
+	dbCharMonitor.FrameScale = private.frame:GetFrameScale() 
+end
+
+function Monitor:ResetFrame()
+	local TsmFrameStatus = TradeSkillMasterDB["g@ @frameStatus"]
+	
+	local options = TsmFrameStatus[private.frame:GetName()]
+	local defaults = options.defaults
+	
+	options.hasLoaded = true
+	for i, v in pairs(defaults) do options[i] = v end
+
+	if private.frame and private.frame:IsVisible() then
+		private.frame:RefreshPosition()
+		dbCharMonitor.FrameScale = private.frame:GetFrameScale() 
 	end
-	private.frame:SetScale(dbCharMonitor.FrameScale)
 end

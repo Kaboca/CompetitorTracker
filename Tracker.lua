@@ -166,9 +166,9 @@ end
 function TSMCT:ToggleMonitorWindow(args)
 	if args and strmatch(args,"reset") then
 		TSMCT:Chat(2,L["CTWindowReset"])
-		TSMCT.MonitoringEnable(false)
-		dbCharMonitor.status.top=nill
-		TSMCT.MonitoringEnable(true)
+		--TSMCT.MonitoringEnable(false)
+		TSMCT.Monitor:ResetFrame()
+		--TSMCT.MonitoringEnable(true)
 	else
 		TSMCT.MonitoringEnable(not dbCharMonitor.MonitorModuleEnabled)
 	end
