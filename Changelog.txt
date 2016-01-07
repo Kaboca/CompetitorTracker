@@ -1,9 +1,7 @@
+== 27 Beta == 
+* Added AceDB-3.0 as a dependancy - because TSM3 no longer uses aceDB for its internal DB but CT depend on it.
+
 == 26 == 
+* Release date: 2015.12.17
 * Ticket 16 - CT Window size and location issue - FIXED
 ** In TSM 3 only one CT Window position and size data will be saved
-
-== 25 == 
-* Release date: 2015.12.16
-* bump TOC
-* TSM 3 / Basic
-
