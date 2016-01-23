@@ -1,5 +1,5 @@
+== 29 Beta == 
+* German localization teszt, done: 58, untranslated: 48
+
 == 28 == 
 * Ticket 17 fixed: lua error on login 
-
-== 27 Beta == 
-* Added AceDB-3.0 as a dependancy - because TSM3 no longer uses aceDB for its internal DB but CT depend on it.
